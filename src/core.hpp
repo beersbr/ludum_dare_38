@@ -23,26 +23,22 @@ typedef struct _entity_t {
     bool is_tile;
     tile_t *tile;
 
+    // Enemy stuff
     bool is_enemy;
-    // TODO: add enemy
+    int enemy_health;
+    int enemy_stat_damage;
 
+    // Player stuff
     bool is_player;
-    // TODO: add player
+    int player_health;
+    int player_stat_damage;
 
+    // Item stuff
     bool is_item;
+    std::string item_name;
+    std::string item_description;
 
-    // std::vector<item_t> item_list;
-
-    model_t *model;
-} entity_t;
-
-
-typedef void (*item_callback)(entity_t *player_entity);
-
-
-typedef struct _item_t {
-    std::string description;
-    std::string name;
+    typedef void (*item_callback)(_entity_t *entity);
 
     item_callback before_turn;
     item_callback after_turn;
@@ -50,8 +46,9 @@ typedef struct _item_t {
     item_callback after_move;
     item_callback before_attack;
     item_callback after_attack;
-    
-} item_t;
+
+    model_t *model;
+} entity_t;
 
 
 typedef struct _scene_t {

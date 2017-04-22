@@ -3,6 +3,7 @@
 
 #include <sdl2/SDL.h>
 #include <map>
+#include <iostream>
 
 #define controller_manager controller_manager_t::instance()
 

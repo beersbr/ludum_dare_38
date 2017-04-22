@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
 
     glEnable(GL_DEPTH_TEST);
 
-
     static bool running = true;
     static SDL_Event event = {};
 
@@ -69,7 +68,6 @@ int main(int argc, char *argv[])
                     break;
                 }
             }
-
         }
 
         if ( controller_manager->get_keydown(SDLK_LEFT)) {
@@ -90,8 +88,6 @@ int main(int argc, char *argv[])
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 
         SDL_GL_SwapWindow(main_window);
     }

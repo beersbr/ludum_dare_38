@@ -6,6 +6,7 @@ controller_manager_t *controller_manager_t::instance() {
     if ( ! controller_manager_t::singleton_instance ) {
         controller_manager_t::singleton_instance = new controller_manager_t();
     }
+
     return controller_manager_t::singleton_instance;
 }
 

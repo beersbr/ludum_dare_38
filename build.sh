@@ -12,7 +12,7 @@ THIRDPARTY_DIR=$BASE_DIR"/thirdparty"
 cp -r thirdparty/frameworks/* $BUILD_DIR/
 
 mkdir -p $BUILD_DIR/shaders 
-cp -r src/shaders/* $BUILD_DIR/shaders/
+cp -r $SRC_DIR/shaders/* $BUILD_DIR/shaders/
 
 pushd $SRC_DIR
     clang++ main.cpp graphics.cpp controller_manager.cpp util.cpp \

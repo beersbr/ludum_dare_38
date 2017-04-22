@@ -78,7 +78,7 @@ void level_t::create_level( int width, int height ) {
 		}
 
 		// Make sure the player has a way out of the room
-		check_walls( grid[i] );
+		check_walls( grid[i] , width, height );
 
 		// Ensure the boundaries are protected by walls
 		if( 0 == grid[i].x ) {

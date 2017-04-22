@@ -95,3 +95,87 @@ void create_shader_program(shader_t *shader, char *vertex_shader_path, char *fra
     return;
 
 }
+
+
+void create_model(model_t *model, mesh_t mesh, shader_t *shader)
+{
+    static int ids = 0;
+
+    assert(model);
+    assert(shader);
+
+    model->id     = ++ids;
+    model->mesh   = mesh;
+    model->shader = shader;
+
+    glGenVertexArrays(1, &model->VAO);
+
+    #ifdef SLOW
+    if ( !model->VAO ) {
+        std::cout << "[ERROR] Could not create VAO for model object" << std::endl;
+        assert(model->VAO);
+    }
+    #endif
+
+    assert(model->VAO);
+
+    glBindVertexArray(model->VAO);
+    glGenBuffers(1, &model->VBO);
+
+    #ifdef SLOW
+    if ( !model->VBO ) {
+        std::cout << "[ERROR] Could not create VBO for model object" << std::endl;
+        assert(model->VBO);
+    }
+    #endif
+
+    assert(model->VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, model->VBO);
+    glBufferData(GL_ARRAY_BUFFER,
+                 (model->mesh.vertices.size()*GFX_VERTEX_SIZE),
+                 &model->mesh.vertices[0],
+                 GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(SHADER_ATTRIBUTE_POSITION);
+    glEnableVertexAttribArray(SHADER_ATTRIBUTE_NORMAL);
+    glEnableVertexAttribArray(SHADER_ATTRIBUTE_COLOR);
+    glEnableVertexAttribArray(SHADER_ATTRIBUTE_UV);
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Winvalid-offsetof"
+    
+    glVertexAttribPointer(SHADER_ATTRIBUTE_POSITION,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          GFX_VERTEX_SIZE,
+                          (GLvoid*)offsetof(vertex_definition_t, position));
+
+    glVertexAttribPointer(SHADER_ATTRIBUTE_NORMAL,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          GFX_VERTEX_SIZE,
+                          (GLvoid*)offsetof(vertex_definition_t, normal));
+
+    glVertexAttribPointer(SHADER_ATTRIBUTE_COLOR,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          GFX_VERTEX_SIZE,
+                          (GLvoid*)offsetof(vertex_definition_t, color));
+
+    glVertexAttribPointer(SHADER_ATTRIBUTE_UV,
+                          2,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          GFX_VERTEX_SIZE,
+                          (GLvoid*)offsetof(vertex_definition_t, uv));
+
+    #pragma GCC diagnostic pop
+
+
+    glBindVertexArray(0);
+}
+

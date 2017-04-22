@@ -70,6 +70,9 @@ int main(int argc, char *argv[])
             }
         }
 
+
+        float ticks = SDL_GetTicks()/500.f;
+
         if ( controller_manager->get_keydown(SDLK_LEFT)) {
             std::cout << "Pressed left" << std::endl;
         }
@@ -86,7 +89,7 @@ int main(int argc, char *argv[])
             std::cout << "Pressed down" << std::endl;
         }
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(((float)sin(ticks)+1.f)/4.f + 0.25f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         SDL_GL_SwapWindow(main_window);

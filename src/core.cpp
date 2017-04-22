@@ -38,6 +38,8 @@ void draw_scene(scene_t *scene)
         glBindVertexArray(model->VAO);
         use_shader(model->shader);
 
+        glm::mat4 translate = glm::translate(glm::mat4(), entity->position);
+
         // TODO(Brett):These should be added to any scaling/rtoation/transaltion that is on the model
         glm::mat4 scale = glm::scale(glm::mat4(), entity->scale);
 
@@ -45,9 +47,8 @@ void draw_scene(scene_t *scene)
         rotate           = glm::rotate(rotate, entity->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
         rotate           = glm::rotate(rotate, entity->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-        glm::mat4 translate = glm::translate(glm::mat4(), entity->position);
 
-        glm::mat4 model_matrix =  translate * scale;
+        glm::mat4 model_matrix = translate * scale;
 
         GLint projection_location = get_uniform_location(model->shader, "projection");
         GLint view_location       = get_uniform_location(model->shader, "view");

@@ -2,5 +2,6 @@ build/*.obj
 *.ilk
 *.pdb
 .DS_Store
+thirdparty/.DS_Store
 .vs
 build/*

@@ -202,10 +202,12 @@ int main(int argc, char *argv[])
 
         if ( controller_manager->get_keydown(SDLK_a) ) {
             level1.move(move_left);
+            scene.camera_position.x -= 10;
         }
 
         if ( controller_manager->get_keydown(SDLK_d) ) {
             level1.move(move_right);
+            scene.camera_position.x += 10;
         }
 
         if ( controller_manager->get_keydown(SDLK_w) ) {

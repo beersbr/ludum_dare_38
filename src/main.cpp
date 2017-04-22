@@ -176,19 +176,19 @@ int main(int argc, char *argv[])
 
         float ticks = SDL_GetTicks()/500.f;
 
-        if ( controller_manager->get_keydown(SDLK_LEFT) ) {
+        if ( controller_manager->get_keydown(SDLK_a) ) {
             level1.move(move_left);
         }
 
-        if ( controller_manager->get_keydown(SDLK_RIGHT) ) {
+        if ( controller_manager->get_keydown(SDLK_d) ) {
             level1.move(move_right);
         }
 
-        if ( controller_manager->get_keydown(SDLK_UP) ) {
+        if ( controller_manager->get_keydown(SDLK_w) ) {
             level1.move(move_up);
         }
 
-        if ( controller_manager->get_keydown(SDLK_DOWN) ) {
+        if ( controller_manager->get_keydown(SDLK_s) ) {
             level1.move(move_down);
         }
 

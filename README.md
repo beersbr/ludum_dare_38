@@ -84,21 +84,8 @@ struct entity {
 We also need a way to show text in the game... I can probably handle that tomorrow 
 
 
-## Saturday 04/22/17 at 01:07AM - 629 files in 1.02 secs TODO REVIEW
-### NOTE (5)
-1. src/main.cpp:50    This is the default shader, it doesnt do anything super interesting right now... and its on the stack
-2. src/main.cpp:57    Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
-3. src/main.cpp:76    This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
-4. src/main.cpp:134   a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
-5. src/main.cpp:140   An entity is where we care abot things. It is the holder for the actual game object.
-
-### TODO (2)
-1. src/core.cpp:27    These should be added to any scaling/rtoation/transaltion that is on the model
-2. src/main.cpp:51    We may need a shader maanger
-
-
 ## Regular TODO
-
+* fix file pathing so we know where to look for shaders and images.
 * draw character as a tall box and have him move around the tiles with the keyboard
 * draw the tiles with respect to the level
 * need something to ddeal with the level above a scene. what sets up the scenes? A game manager that reads from a text file? that could be nice. Or just reads from a set of instructions that we just write right into our c files.
@@ -115,5 +102,18 @@ We also need a way to show text in the game... I can probably handle that tomorr
 * add post processing for level transitions from state manager/scene? manager
 * add post processing for attacks
 * add sounds and sound manager (SDL MIXER)
+
+
+## Saturday 04/22/17 at 01:07AM - 629 files in 1.02 secs TODO REVIEW
+### NOTE (5)
+1. src/main.cpp:50    This is the default shader, it doesnt do anything super interesting right now... and its on the stack
+2. src/main.cpp:57    Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
+3. src/main.cpp:76    This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
+4. src/main.cpp:134   a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
+5. src/main.cpp:140   An entity is where we care abot things. It is the holder for the actual game object.
+
+### TODO (2)
+1. src/core.cpp:27    These should be added to any scaling/rtoation/transaltion that is on the model
+2. src/main.cpp:51    We may need a shader maanger
 
 

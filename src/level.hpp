@@ -7,7 +7,7 @@
 
 enum Movement { move_left, move_right, move_up, move_down };
 
-typedef struct level {
+typedef struct _level_t {
 	int grid_width;
 	int grid_height;
 	std::vector<tile_t> grid;

@@ -4,7 +4,7 @@
 
 #include "level.hpp"
 
-void level::create_level( int width, int height ) {
+void level_t::create_level( int width, int height ) {
 	int count = 0;
 
 	srand( time(NULL) );
@@ -30,7 +30,7 @@ void level::create_level( int width, int height ) {
 
 
 // Query a coordinate on the map to check for events at that location
-int level::query_location( int location_x, int location_y ) {
+int level_t::query_location( int location_x, int location_y ) {
 	int level_event = 0;
 	int index = grid_width*location_y + location_x;
 
@@ -53,7 +53,7 @@ int level::query_location( int location_x, int location_y ) {
 
 // TODO: we'll need the location of the character for this to be useful at all
 // Move main character left, right, up, or down on the grid if possible
-int level::move( Movement move ) {
+int level_t::move( Movement move ) {
 	int success = 0; 
 
 	// TODO: return something signifying an event at the new location

@@ -2,7 +2,9 @@
 #define GRAPHICS_HPP
 
 #include <glm/glm.hpp>
+#include <iostream>
 #include <vector>
+#include <OpenGL/gl3.h>
 
 #include "util.hpp"
 
@@ -15,7 +17,7 @@ typedef struct _vertex_definition_t {
 
 typedef struct _shader_t {
     GLuint id;
-    short inuse;
+    bool in_use;
 } shader_t;
 
 
@@ -34,7 +36,7 @@ typedef struct _model_t {
     GLuint VAO;
     GLuint VBO;
 
-    shader_id
+    shader_t *shader;
 
 } model_t;
 

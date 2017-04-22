@@ -12,17 +12,13 @@
 #include <OpenGL/gl3.h>
 #endif
 
-<<<<<<< Updated upstream
 #include <map> 
 
 #include "controller_manager.hpp"
-#include "controller_manager.cpp"
-=======
 #include "graphics.hpp"
 
 static int WIDTH  = 800;
 static int HEIGHT = 600;
->>>>>>> Stashed changes
 
 int main(int argc, char *argv[])
 {

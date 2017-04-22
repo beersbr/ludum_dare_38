@@ -117,11 +117,11 @@ int level_t::query_location( int location_x, int location_y ) {
 	int level_event = 0;
 	int index = grid_width*location_y + location_x;
 
-	if ( grid_width< location_x ) {
+	if ( grid_width <= location_x || location_x < 0 ) {
 		level_event = -1;
 		std::cout << "invalid location x" << std::endl;
 	}
-	else if ( grid_height < location_y ) {
+	else if ( grid_height <= location_y || location_y < 0) {
 		level_event = -1;
 		std::cout << "invalid location y" << std::endl;
 	}

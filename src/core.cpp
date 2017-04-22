@@ -1,11 +1,5 @@
 #include "core.hpp"
 
-void push_state(state_manager_t *manager, state_t state) 
-{
-    manager->states.push_back(state);
-    manager->current_state = manager->states.back();
-}
-
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,
                   glm::vec3 camera_location,

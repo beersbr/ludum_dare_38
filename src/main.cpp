@@ -185,11 +185,10 @@ int main(int argc, char *argv[])
                                             &model);
 
     player->scale = player_size;
+    player->level_coordinate = glm::vec2(0.f, 0.f);
 
     scene.camera_lookat = camera_lookat;
     scene.camera_position = camera_position;
-
-    
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -249,19 +248,37 @@ int main(int argc, char *argv[])
         }
 
         if ( controller_manager->get_keydown(SDLK_a) ) {
-            level1.move(move_left);
+            if ( level1.query_location(player->level_coordinate.x-1.0,
+                                       player->level_coordinate.y) == 0 ) {
+                player->position += glm::vec3(-1.0f * tile_size.x, 0.0f, 0.0f);
+                player->level_coordinate.x -= 1;
+            }
+
         }
 
         if ( controller_manager->get_keydown(SDLK_d) ) {
-            level1.move(move_right);
+            if ( level1.query_location(player->level_coordinate.x+1.0,
+                                       player->level_coordinate.y) == 0 ) {
+                player->position += glm::vec3(1.0f * tile_size.x, 0.0f, 0.0f);
+                player->level_coordinate.x += 1;
+            }
         }
 
         if ( controller_manager->get_keydown(SDLK_w) ) {
-            level1.move(move_up);
+            if ( level1.query_location(player->level_coordinate.x,
+                                       player->level_coordinate.y-1.0f) == 0 ) {
+                player->position += glm::vec3(0.0f, 0.0f, -1.0f * tile_size.y);
+                player->level_coordinate.y -= 1;
+            }
         }
 
         if ( controller_manager->get_keydown(SDLK_s) ) {
-            level1.move(move_down);
+            if ( level1.query_location(player->level_coordinate.x,
+                                       player->level_coordinate.y+1.0f) == 0 ) {
+                player->position += glm::vec3(0.0f, 0.0f, 1.0f * tile_size.y);
+                player->level_coordinate.y += 1;
+            }
+
         }
 
         if ( controller_manager->get_keydown(SDLK_SPACE) ) {

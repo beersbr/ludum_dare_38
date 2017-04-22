@@ -21,6 +21,8 @@ typedef struct _entity_t {
     glm::vec3 rotation;
     glm::vec3 scale;
 
+    glm::vec2 level_coordinate;
+
     bool is_tile;
     tile_t *tile;
 
@@ -28,6 +30,7 @@ typedef struct _entity_t {
     bool is_enemy;
     int enemy_health;
     int enemy_stat_damage;
+
 
     // Player stuff
     bool is_player;
@@ -74,36 +77,14 @@ typedef struct _scene_t {
 } scene_t;
 
 
-typedef void (*state_transition_arrive_callback)();
-typedef void (*state_transition_depart_callback)();
-typedef void (*state_setup_callback)();
-typedef void (*state_render_callback)();
-typedef void (*state_update_callback)(unsigned long ticks);
+typedef void (*game_state_update)(unsigned long);
+typedef void (*game_state_render)();
 
 typedef struct _game_state_t {
-    unsigned long id;
-    scene_t *scene;
-
-    bool is_setup;
-    bool is_arriving;
-    bool is_departing;
-
-    state_setup_callback setup;
-    state_render_callback render;
-    state_update_callback update;
-
-    state_transition_arrive_callback transition_arrive;
-    state_transition_depart_callback transition_depart;
-
+    game_state_update update;
+    game_state_render render;
 } game_state_t;
 
-typedef struct _state_manager_t {
-    std::list<game_state_t> states;
-    game_state_t *current_state;
-} state_manager_t;
-
-
-void push_state(state_manager_t *manager, game_state_t state);
 
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,

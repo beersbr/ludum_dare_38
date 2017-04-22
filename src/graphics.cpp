@@ -13,8 +13,16 @@ void use_shader(shader_t *shader)
     }
 }
 
+void draw_model(model_t *model) 
+{
+    glBindVertexArray(model->VAO);
+    glDrawArrays(GL_TRIANGLES, 0, model->mesh.vertices.size());
+    glBindVertexArray(0);
+}
 
-GLuint create_shader(GLenum shader_type, std::string shader_source) {
+
+GLuint create_shader(GLenum shader_type, std::string shader_source)
+{
     GLuint shader = glCreateShader(shader_type);
 
     char *source = (char*)shader_source.c_str();

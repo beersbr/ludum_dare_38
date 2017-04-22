@@ -15,6 +15,7 @@ void level::create_level( int width, int height ) {
 	}
 }
 
+
 // Query a coordinate on the map to check for events at that location
 int level::query_location( int location_x, int location_y ) {
 	int level_event = 0;
@@ -34,6 +35,7 @@ int level::query_location( int location_x, int location_y ) {
 
 	return level_event;
 }
+
 
 // TODO: we'll need the location of the character for this to be useful at all
 // Move main character left, right, up, or down on the grid if possible

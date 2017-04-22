@@ -17,6 +17,7 @@
 #include "controller_manager.hpp"
 #include "level.hpp"
 #include "graphics.hpp"
+#include "core.hpp"
 
 static int WIDTH  = 800;
 static int HEIGHT = 600;
@@ -51,15 +52,47 @@ int main(int argc, char *argv[])
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
 
-    SDL_GL_SetSwapInterval(0);
+    scene_t scene = {};
 
+    glm::mat4 projection_matrix = glm::ortho((float)WIDTH/2.f*-1.f,
+                                             (float)WIDTH/2.f,
+                                             (float)HEIGHT/2.f,
+                                             (float)HEIGHT/2.f*-1.f,
+                                             0.01f,
+                                             1000.f);
+
+    glm::mat4 view_matrix = glm::lookAt(glm::vec3(0.0f, 100.0f, 300.f),
+                                        glm::vec3(0.0f, 0.0f, 0.0f),
+                                        glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+    glm::mat4 model_matrix = glm::mat4(1.0f);
+
+    create_scene(&scene, projection_matrix, view_matrix);
+
+    vertex_definition_t mesh_data[] = {
+        // front
+        { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 0.0f) },
+    };
+
+    mesh_t cube_mesh = {};
+    cube_mesh.vertices.assign(mesh_data, mesh_data+sizeof(mesh_data));
+
+    model_t model = {};
+    create_model(&model, cube_mesh, &default_shader);
+
+    SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
 
     static bool running = true;
     static SDL_Event event = {};
 
     level_t level1;
-
     level1.create_level(3,4);
 
     std::cout << "Level event: " << level1.grid[1][2] << std::endl;
@@ -102,6 +135,7 @@ int main(int argc, char *argv[])
 
         glClearColor(((float)sin(ticks)+1.f)/4.f + 0.25f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
         SDL_GL_SwapWindow(main_window);
     }

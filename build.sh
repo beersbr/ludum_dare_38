@@ -10,5 +10,5 @@ THIRDPARTY_DIR=$BASE_DIR"/thirdparty"
 # -I include dir
 
 pushd $SRC_DIR
-	clang++ main.cpp -I$THIRDPARTY_DIR"/include" -F$THIRDPARTY_DIR"/frameworks" -framework SDL2 -o $BUILD_DIR"/ludum_dare_38" 
+	clang++ main.cpp -I$THIRDPARTY_DIR"/include" -F$THIRDPARTY_DIR"/frameworks" -framework SDL2 -framework opengl -o $BUILD_DIR"/ludum_dare_38" 
 popd

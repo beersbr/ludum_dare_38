@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <list>
+#include <glm/ext.hpp>
+
 
 #define SCENE_ENTITY_POOL_MAX 512
 
@@ -48,6 +50,7 @@ typedef struct _item_t {
     item_callback after_move;
     item_callback before_attack;
     item_callback after_attack;
+    
 } item_t;
 
 
@@ -56,7 +59,9 @@ typedef struct _scene_t {
 	unsigned int id;
 
     glm::mat4 projection_matrix;
-    glm::mat4 view_matrix;
+
+    glm::vec3 camera_position;
+    glm::vec3 camera_lookat;
 
     std::vector<entity_t> entities_pool;
 
@@ -69,7 +74,10 @@ typedef struct _scene_t {
 } scene_t;
 
 
-void create_scene(scene_t *scene, glm::mat4 projection_matrix, glm::mat4 view_matrix);
+void create_scene(scene_t *scene,
+                  glm::mat4 projection_matrix,
+                  glm::vec3 camera_location,
+                  glm::vec3 camera_lookat);
 
 void draw_scene(scene_t *scene);
 

@@ -1,13 +1,18 @@
 #include "core.hpp"
 
-void create_scene(scene_t *scene, glm::mat4 projection_matrix, glm::mat4 view_matrix)
+void create_scene(scene_t *scene,
+                  glm::mat4 projection_matrix,
+                  glm::vec3 camera_location,
+                  glm::vec3 camera_lookat)
 {
     static unsigned int ids = 0;
     assert(scene);
 
     scene->id = ++ids;
     scene->projection_matrix = projection_matrix;
-    scene->view_matrix = view_matrix;
+
+    scene->camera_position = camera_location;
+    scene->camera_lookat = camera_lookat;
 
     scene->entities_pool.resize(SCENE_ENTITY_POOL_MAX);
     scene->open_entities.resize(SCENE_ENTITY_POOL_MAX);
@@ -20,28 +25,36 @@ void create_scene(scene_t *scene, glm::mat4 projection_matrix, glm::mat4 view_ma
 
 void draw_scene(scene_t *scene)
 {
+    assert(scene);
+
+    glm::mat4 view_matrix = glm::lookAt(scene->camera_position,
+                                        scene->camera_lookat,
+                                        glm::vec3(0.0f, 1.0f, 0.0f));
+
+
     for ( auto entity : scene->active_entities ) {
 
-        glm::mat4 model_matrix = glm::mat4(1.f);
+        model_t *model = entity->model;
+        glBindVertexArray(model->VAO);
+        use_shader(model->shader);
 
         // TODO(Brett):These should be added to any scaling/rtoation/transaltion that is on the model
-        model_matrix = glm::scale(model_matrix, entity->scale);
+        glm::mat4 scale = glm::scale(glm::mat4(), entity->scale);
 
-        model_matrix = glm::rotate(model_matrix, entity->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-        model_matrix = glm::rotate(model_matrix, entity->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-        model_matrix = glm::rotate(model_matrix, entity->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 rotate = glm::rotate(glm::mat4(), entity->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+        rotate           = glm::rotate(rotate, entity->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+        rotate           = glm::rotate(rotate, entity->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-        model_matrix = glm::translate(model_matrix, entity->position);
+        glm::mat4 translate = glm::translate(glm::mat4(), entity->position);
 
-        model_t *model = entity->model;
-        use_shader(model->shader);
+        glm::mat4 model_matrix =  translate * scale;
 
         GLint projection_location = get_uniform_location(model->shader, "projection");
         GLint view_location       = get_uniform_location(model->shader, "view");
         GLint model_location      = get_uniform_location(model->shader, "model");
 
         glUniformMatrix4fv(projection_location, 1, false, (GLfloat*)&scene->projection_matrix[0]);
-        glUniformMatrix4fv(view_location, 1, false, (GLfloat*)&scene->view_matrix[0]);
+        glUniformMatrix4fv(view_location, 1, false, (GLfloat*)&view_matrix[0]);
         glUniformMatrix4fv(model_location, 1, false, (GLfloat*)&model_matrix[0]);
 
         draw_model(model);
@@ -64,7 +77,7 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
     entity->id       = ++ids;
     entity->position = position;
     entity->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    entity->scale    = glm::vec3(0.0f, 0.0f, 0.0f);
+    entity->scale    = glm::vec3(1.0f, 1.0f, 1.0f);
     entity->model    = model;
     
     scene->active_entities.push_back(entity);

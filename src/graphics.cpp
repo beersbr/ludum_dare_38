@@ -36,9 +36,9 @@ GLint get_uniform_location(shader_t *shader, std::string name)
 
 void draw_model(model_t *model) 
 {
-    glBindVertexArray(model->VAO);
+    // glBindVertexArray(model->VAO);
     glDrawArrays(GL_TRIANGLES, 0, model->mesh.vertices.size());
-    glBindVertexArray(0);
+    // glBindVertexArray(0);
 }
 
 
@@ -207,7 +207,44 @@ void create_model(model_t *model, mesh_t mesh, shader_t *shader)
 
     #pragma GCC diagnostic pop
 
-
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
+
+void create_texture(texture_t *texture, char const * image_path) 
+{
+    assert(texture);
+
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &texture->id);
+    assert(texture->id);
+
+    glBindTexture(GL_TEXTURE_2D, texture->id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    SDL_Surface *tmp_sdl_surface = IMG_Load(image_path);
+    texture->width = tmp_sdl_surface->w;
+    texture->height = tmp_sdl_surface->h;
+
+    // NOTE(Brett):assume bytes are in the corect order for now
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 texture->width,
+                 texture->height,
+                 0,
+                 GL_RGBA,
+                 GL_UNSIGNED_BYTE,
+                 tmp_sdl_surface->pixels);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
+
+
 

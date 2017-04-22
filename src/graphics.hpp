@@ -8,6 +8,9 @@
 #include <OpenGL/gl3.h>
 #include <map>
 
+#include <SDL2/SDL.h>
+#include <SDL2_Image/SDL_image.h>
+
 #include <cstddef>
 
 #include "util.hpp"
@@ -101,9 +104,8 @@ GLuint create_shader(GLenum type, char *shader_source);
 
 void create_model(model_t *model, mesh_t mesh, shader_t *shader);
 
-// void use_texture(texture_t *texture);
+void create_texture(texture_t *texture, char const * image_path); 
 
-// GLint create_texture(texture_t *texture, )
-
+void use_texture(texture_t *texture, GLint unit);
 
 #endif

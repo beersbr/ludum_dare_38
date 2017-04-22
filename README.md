@@ -110,4 +110,10 @@ We also need a way to show text in the game... I can probably handle that tomorr
 * It would be nice to be able to move the camera around via the mouse (perhaps holding the middle mouse button will allow the user to move the camera around the center)
 * add a light and the code to deal with that so things look a little nicer
 * add texture handling so we can add images to the tiles
+* create the meshes for the stair tiles (up and down)
+* add bump mapping?
+* add post processing for level transitions from state manager/scene? manager
+* add post processing for attacks
+* add sounds and sound manager (SDL MIXER)
+
 

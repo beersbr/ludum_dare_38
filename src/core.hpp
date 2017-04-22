@@ -23,6 +23,8 @@ typedef struct _entity_t {
 
     glm::vec2 level_coordinate;
 
+    bool is_static;
+
     bool is_tile;
     tile_t *tile;
 

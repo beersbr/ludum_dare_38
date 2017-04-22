@@ -170,6 +170,46 @@ int main(int argc, char *argv[])
                                                      glm::vec3(x_offset, y_offset, z_offset),
                                                      &model);
 
+        if ( tile.wall_w ) { 
+            entity_t *tile_wall = request_scene_entity(&scene,
+                                                       glm::vec3(x_offset, 55.f/2.f, z_offset+25.f-(5.0/2.f)),
+                                                       &model);
+
+            tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
+            tile_wall->is_static = true;
+
+        }
+
+        if ( tile.wall_s ) { 
+            entity_t *tile_wall = request_scene_entity(&scene,
+                                                       glm::vec3(x_offset, 55.f/2.f, z_offset-25.f+(5.0/2.f)),
+                                                       &model);
+
+            tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
+            tile_wall->is_static = true;
+
+        }
+
+        if ( tile.wall_a ) { 
+            entity_t *tile_wall = request_scene_entity(&scene,
+                                                       glm::vec3(x_offset-25.f+(5.0/2.f), 55.f/2.f, z_offset),
+                                                       &model);
+
+            tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
+            tile_wall->is_static = true;
+
+        }
+
+        if ( tile.wall_d ) { 
+            entity_t *tile_wall = request_scene_entity(&scene,
+                                                       glm::vec3(x_offset+25.f-(5.0/2.f), 55.f/2.f, z_offset),
+                                                       &model);
+
+            tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
+            tile_wall->is_static = true;
+
+        }
+
         std::cout << tile_entity->id << std::endl;
         tile_entity->scale = tile_size;
     }
@@ -181,7 +221,7 @@ int main(int argc, char *argv[])
                                         (8.0*tile_size.z)/2.f);
 
 
-    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 350.f, 300.f);
+    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 550.f, 250.f);
 
     entity_t *player = request_scene_entity(&scene,
                                             glm::vec3(tile_size.x/2.f,

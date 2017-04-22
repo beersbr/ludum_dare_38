@@ -95,8 +95,6 @@ int main(int argc, char *argv[])
     level_t level1;
     level1.create_level(3,4);
 
-    std::cout << "Level event: " << level1.grid[1][2] << std::endl;
-
     while ( running ) { 
         while ( SDL_PollEvent(&event) ) {
             switch(event.type) {

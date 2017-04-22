@@ -169,9 +169,6 @@ int main(int argc, char *argv[])
     static bool running = true;
     static SDL_Event event = {};
 
-    level_t level1;
-    level1.create_level(3,4);
-
     entity_t enemy;
     enemy.is_enemy = true;
     enemy.enemy_health = 100;

@@ -31,7 +31,7 @@ GLuint create_shader(GLenum shader_type, std::string shader_source) {
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &log_length);
         std::vector<char> log(log_length);
         glGetShaderInfoLog(shader, log_length, NULL, (GLchar *)(&log[0]));
-        std::cout << "[ERROR] shader compilcation error in shader " << shader_type << std::endl << &log[0] << std::endl;
+        std::cout << "[ERROR] shader compilation error in shader " << shader_type << std::endl << &log[0] << std::endl;
         #endif
 
         return 0;
@@ -41,7 +41,7 @@ GLuint create_shader(GLenum shader_type, std::string shader_source) {
 }
 
 
-void create_shader_program(shader_t *shader, char *vertex_shader_path, char *fragment_shader_path)
+void create_shader_program(shader_t *shader, char const * vertex_shader_path, char const * fragment_shader_path)
 {
     #ifdef SLOW 
     std::cout << "creating shader with: " << vertex_shader_path << " " << fragment_shader_path << std::endl;
@@ -55,12 +55,15 @@ void create_shader_program(shader_t *shader, char *vertex_shader_path, char *fra
     #endif
 
     GLuint vertex_shader = create_shader(GL_VERTEX_SHADER, vertex_shader_source);
+    assert(vertex_shader);
+
 
     #ifdef SLOW 
     std::cout << "compiling fragment shader: " << std::endl << fragment_shader_source << std::endl;
     #endif
-
+    
     GLuint fragment_shader = create_shader(GL_FRAGMENT_SHADER, fragment_shader_source);
+    assert(fragment_shader);
 
     GLuint program = glCreateProgram();
     glAttachShader(program, vertex_shader);
@@ -144,7 +147,7 @@ void create_model(model_t *model, mesh_t mesh, shader_t *shader)
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Winvalid-offsetof"
-    
+
     glVertexAttribPointer(SHADER_ATTRIBUTE_POSITION,
                           3,
                           GL_FLOAT,

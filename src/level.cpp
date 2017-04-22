@@ -5,6 +5,36 @@
 
 #include "level.hpp"
 
+int check_walls(tile_t tile) {
+	int num_walls = 0;
+
+	if ( tile.wall_w ) { 
+		num_walls++; 
+	}
+
+	if ( tile.wall_a ) { 
+		num_walls++; 
+	}
+
+	if ( tile.wall_s ) { 
+		num_walls++; 
+	}
+
+	if ( tile.wall_d ) { 
+		num_walls++; 
+	}
+
+	// We don't want to close the player out, so reset the grid here
+	if( num_walls > 3 ) {
+		tile.wall_w = false;
+		tile.wall_a = false;
+		tile.wall_s = false;
+		tile.wall_d = false;
+	}
+
+	return num_walls;
+}
+
 void level_t::create_level( int width, int height ) {
 	int count = 0;
 
@@ -23,12 +53,61 @@ void level_t::create_level( int width, int height ) {
 
 
 	for( int i=0; i<grid_width*grid_height; i++) {
-		std::cout << grid[i].type << std::endl;
 		grid[i].x = i%grid_width;
 		grid[i].y = floor(i/grid_width);
+
+		// Add walls to the level (w, a, s, d)
+		// WALL_CREATION_CHANCE% chance of a wall being created
+		// TODO(JP): Consider having more contiguous walls???
+
+		if( 0 == rand()%WALL_CREATION_CHANCE ) {
+			grid[i].wall_w = true;
+		}
+
+		if( 0 == rand()%WALL_CREATION_CHANCE ) {
+			grid[i].wall_a = true;
+		}
+
+		if( 0 == rand()%WALL_CREATION_CHANCE ) {
+			grid[i].wall_s = true;
+		}
+
+		if( 0 == rand()%WALL_CREATION_CHANCE ) {
+			grid[i].wall_d = true;
+		}
+
+		// Make sure the player has a way out of the room
+		check_walls(grid[i]);
+
+		// Ensure the boundaries are protected by walls
+		if( 0 == grid[i].x ) {
+			grid[i].wall_a = true;
+		}
+		else if ( width == grid[i].x+1) {
+			grid[i].wall_d = true;
+		}
+
+		if( 0 == grid[i].y ) {
+			grid[i].wall_s = true;
+		}
+		else if( height == grid[i].y+1) {
+			grid[i].wall_w = true;
+		}	
+
+
+
+		std::cout << grid[i].type << "		" << 
+			grid[i].wall_w << ", " <<
+			grid[i].wall_a << ", " << 
+			grid[i].wall_s << ", " << 
+			grid[i].wall_d << 
+			"	x: " << grid[i].x <<
+			"	y: " << grid[i].y << 
+			std::endl;
 	}
 
-	// TODO: add stuff to make level interesting
+
+	// TODO(JP): add stuff to make level interesting
 }
 
 
@@ -46,7 +125,7 @@ int level_t::query_location( int location_x, int location_y ) {
 		std::cout << "invalid location y" << std::endl;
 	}
 	else {
-		// TODO: check for other things
+		// TODO(JP): check for other things
 		level_event = grid[index].type;
 	}
 
@@ -54,7 +133,7 @@ int level_t::query_location( int location_x, int location_y ) {
 }
 
 
-// TODO: we'll need the location of the character for this to be useful at all
+// TODO(JP): we'll need the location of the character for this to be useful at all
 // Move main character left, right, up, or down on the grid if possible
 int level_t::move( Movement move ) {
 	int success = 0; 

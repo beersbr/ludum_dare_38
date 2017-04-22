@@ -5,6 +5,8 @@
 
 #include "tile.hpp"
 
+#define WALL_CREATION_CHANCE	50  // percent
+
 enum Movement { move_left, move_right, move_up, move_down };
 
 typedef struct _level_t {

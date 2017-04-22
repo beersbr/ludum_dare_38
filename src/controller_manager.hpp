@@ -15,10 +15,22 @@ struct controller_manager_t {
 
     bool get_keydown(const SDL_Keycode keycode);
 
+    void set_mousedown(const unsigned int);
+    void set_mouseup(const unsigned int);
+
+    bool get_mousedown(const unsigned int);
+
     static controller_manager_t *singleton_instance;
 
     controller_manager_t();
     std::map<SDL_Keycode const, bool> keystates;
+
+    std::map<int const, bool> mousestates;
+
+    int cursor_x;
+    int cursor_y;
+
+    void set_cursor_position(const int x, const int y);
 };
 
 #endif

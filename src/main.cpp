@@ -140,6 +140,11 @@ int main(int argc, char *argv[])
     // NOTE(Brett):prepare the level
     level_t level1;
     level1.create_level(8,8);
+    level1.create_wall( 4, 3, 'w' );
+    level1.create_wall( 1, 2, 'a' );
+    level1.create_wall( 6, 7, 's' );
+    level1.create_wall( 5, 1, 'd' );
+    level1.print_level();
 
     glm::vec3 tile_size = glm::vec3(50.f, 20.f, 50.f);
 

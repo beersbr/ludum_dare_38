@@ -40,6 +40,5 @@ bool controller_manager_t::get_mousedown(const unsigned int mousecode) {
 }
 
 void controller_manager_t::set_cursor_position(const int x, const int y) {
-    cursor_x = x;
-    cursor_y = y;
+    cursor = glm::vec2((float)x, (float)y);
 }

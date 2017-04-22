@@ -7,6 +7,11 @@
 #include <unistd.h>
 #include <limits.h>
 
+#define PI 3.14159
+
+#define DEGREES_TO_RADIANS(d) ((d) * PI/180.f)
+#define RADIANS_TO_DEGRESS(r) ((d) * 180.f/PI)
+
 #define ARRAY_SIZE(ar) (sizeof((ar))/sizeof((ar)[0]))
 
 std::string read_file(char const * file_name);

@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 
     // NOTE(Brett):prepare the level
     level_t level1;
-    level1.create_level(3,4);
+    level1.create_level(8,8);
 
     glm::vec3 tile_size = glm::vec3(50.f, 20.f, 50.f);
 
@@ -150,18 +150,40 @@ int main(int argc, char *argv[])
 
         float x_offset = tile.x * tile_size.x + tile_size.x/2.f;
         float z_offset = tile.y * tile_size.z + tile_size.z/2.f;
+        float y_offset = 0.f;
 
         std::cout << x_offset << " " << z_offset << std::endl;
+
+        if ( tile.type == level_entrance ) {
+            y_offset -= 20.f;
+        }
+        if ( tile.type == level_exit ) {
+            y_offset += 20.f;
+        }
 
         // NOTE(Brett):An entity is where we care abot things. It is the holder for the actual game object.
         // right now an entity is nothing more than a position, id and memory inside the scene.
         entity_t *tile_entity = request_scene_entity(&scene,
-                                                     glm::vec3(x_offset, 0.0f, z_offset),
+                                                     glm::vec3(x_offset, y_offset, z_offset),
                                                      &model);
 
         std::cout << tile_entity->id << std::endl;
         tile_entity->scale = tile_size;
     }
+
+    glm::vec3 player_size = glm::vec3(35.0f, 50.0f, 30.f);
+
+    glm::vec3 camera_lookat = glm::vec3((8.0*tile_size.x)/2.f,
+                                        0.0f,
+                                        (8.0*tile_size.z)/2.f);
+
+    static float MAX_XZ_DISTANCE = 300.f;
+    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 350.f, MAX_XZ_DISTANCE);
+    // scene.request_scene_entity(&scene);
+
+
+    scene.camera_lookat = camera_lookat;
+    scene.camera_position = camera_position;
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -181,6 +203,8 @@ int main(int argc, char *argv[])
     item_sword.after_attack = &sword_deal_damage;
 
     while ( running ) { 
+        controller_manager->last_cursor = controller_manager->cursor;
+
         while ( SDL_PollEvent(&event) ) {
             switch(event.type) {
                 case SDL_QUIT: {
@@ -209,17 +233,27 @@ int main(int argc, char *argv[])
                 }
             }
         }
-
         float ticks = SDL_GetTicks()/500.f;
+
+
+
+        if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
+            glm::vec2 delta = controller_manager->cursor - controller_manager->last_cursor;
+
+            glm::vec3 eye = scene.camera_position - scene.camera_lookat;
+
+            glm::vec3 new_eye = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+            scene.camera_position = scene.camera_lookat + new_eye;
+
+        }
 
         if ( controller_manager->get_keydown(SDLK_a) ) {
             level1.move(move_left);
-            scene.camera_position.x -= 10;
         }
 
         if ( controller_manager->get_keydown(SDLK_d) ) {
             level1.move(move_right);
-            scene.camera_position.x += 10;
         }
 
         if ( controller_manager->get_keydown(SDLK_w) ) {
@@ -233,15 +267,6 @@ int main(int argc, char *argv[])
         if ( controller_manager->get_keydown(SDLK_SPACE) ) {
         	// attack
         	item_sword.after_attack( &enemy );
-        }
-
-        if ( controller_manager->get_mousedown(SDL_BUTTON_LEFT) ) {
-        	std::cout << controller_manager->cursor_x << ", " << controller_manager->cursor_y << " Left click" << std::endl;
-
-        }
-
-        if ( controller_manager->get_mousedown(SDL_BUTTON_RIGHT) ) {
-        	std::cout << controller_manager->cursor_x << ", " << controller_manager->cursor_y << " Right click" << std::endl;
         }
 
         // prepare scene()

@@ -4,6 +4,7 @@
 #include <sdl2/SDL.h>
 #include <map>
 #include <iostream>
+#include <glm/glm.hpp>
 
 #define controller_manager controller_manager_t::instance()
 
@@ -27,8 +28,8 @@ struct controller_manager_t {
 
     std::map<int const, bool> mousestates;
 
-    int cursor_x;
-    int cursor_y;
+    glm::vec2 last_cursor;
+    glm::vec2 cursor;
 
     void set_cursor_position(const int x, const int y);
 };

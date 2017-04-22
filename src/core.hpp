@@ -66,6 +66,8 @@ typedef struct _scene_t {
     std::list<entity_t*> active_entities;
     std::list<entity_t*> dead_entities;
 
+    entity_t *player;
+
     level_t level;
 
 } scene_t;

@@ -5,7 +5,8 @@
 enum Tile_type {
 	level_entrance = 1,
 	level_exit,
-	item, wall
+	item,
+	wall
 	/* TODO: add more room types? */ 
 };
 

@@ -3,6 +3,8 @@
 
 #include "graphics.hpp"
 #include "tile.hpp"
+#include "level.hpp"
+
 #include <vector>
 #include <list>
 
@@ -61,6 +63,8 @@ typedef struct _scene_t {
     std::list<entity_t*> open_entities;
     std::list<entity_t*> active_entities;
     std::list<entity_t*> dead_entities;
+
+    level_t level;
 
 } scene_t;
 

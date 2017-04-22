@@ -47,8 +47,17 @@ typedef struct _shader_t {
     bool in_use;
 
     std::map<std::string, GLint> uniform_locations;
-
 } shader_t;
+
+
+typedef struct _texture_t {
+    GLuint id;
+
+    bool in_use;
+
+    unsigned int width;
+    unsigned int height;
+} texture_t;
 
 
 typedef struct _mesh_t {
@@ -84,11 +93,11 @@ void use_shader(shader_t *shader);
 
 GLint get_uniform_location(shader_t *shader, std::string name);
 
+void create_shader_program(shader_t *shader, char const * vertex_shader, char const * fragment_shader);
+
 void draw_model(model_t *model);
 
 GLuint create_shader(GLenum type, char *shader_source);
-
-void create_shader_program(shader_t *shader, char const * vertex_shader, char const * fragment_shader);
 
 void create_model(model_t *model, mesh_t mesh, shader_t *shader);
 

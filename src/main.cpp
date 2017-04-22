@@ -192,6 +192,8 @@ int main(int argc, char *argv[])
             level1.move(move_down);
         }
 
+        // prepare scene()
+
         float factor = ((float)sin(ticks)+1.f)/4.f + 0.25f;
         glClearColor(factor, 0.0f, factor, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

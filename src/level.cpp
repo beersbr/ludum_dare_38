@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <cmath>
 
 #include "level.hpp"
 
@@ -18,11 +19,13 @@ void level_t::create_level( int width, int height ) {
 	grid[rand() % width].type = level_entrance;
 
 	// Create exit at top row of grid
-	grid[rand() % width + (width*height-width)]. type = level_exit;
+	grid[rand() % width + (width*height-width)].type = level_exit;
 
 
 	for( int i=0; i<grid_width*grid_height; i++) {
 		std::cout << grid[i].type << std::endl;
+		grid[i].x = i%grid_width;
+		grid[i].y = floor(i/grid_width);
 	}
 
 	// TODO: add stuff to make level interesting

@@ -47,29 +47,34 @@ int main(int argc, char *argv[])
     // glew things for windows
     #endif
     
+    // NOTE(Brett):This is the default shader, it doesnt do anything super interesting right now... and its on the stack
+    // TODO(Brett):We may need a shader maanger
     shader_t default_shader = {};
     create_shader_program(&default_shader,
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
 
+    // NOTE(Brett):Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
+    // point
     scene_t scene = {};
 
     glm::mat4 projection_matrix = glm::ortho((float)WIDTH/2.f*-1.f,
                                              (float)WIDTH/2.f,
-                                             (float)HEIGHT/2.f,
                                              (float)HEIGHT/2.f*-1.f,
+                                             (float)HEIGHT/2.f,
                                              0.01f,
-                                             1000.f);
+                                             5000.f);
 
-    glm::mat4 view_matrix = glm::lookAt(glm::vec3(0.0f, 100.0f, 300.f),
+    glm::mat4 view_matrix = glm::lookAt(glm::vec3(-100.0f, 100.0f, 0.0f),
                                         glm::vec3(0.0f, 0.0f, 0.0f),
                                         glm::vec3(0.0f, 1.0f, 0.0f));
 
 
-    glm::mat4 model_matrix = glm::mat4(1.0f);
-
     create_scene(&scene, projection_matrix, view_matrix);
 
+
+    // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
+    // here but that is wher eit is right now.
     vertex_definition_t mesh_data[] = {
         // front
         { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 1.0f) },
@@ -78,13 +83,69 @@ int main(int argc, char *argv[])
         { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
         { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
         { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 0.0f) },
+
+        // back
+        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 0.0f) },
+
+        // top
+        { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(1.0f, 0.0f) },
+
+        // bottom
+        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(1.0f, 0.0f) },
+
+        // left
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 0.0f) },
+
+        // right
+        { glm::vec3( 0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 0.0f) },
     };
 
     mesh_t cube_mesh = {};
-    cube_mesh.vertices.assign(mesh_data, mesh_data+sizeof(mesh_data));
 
+    cube_mesh.vertices.resize(ARRAY_SIZE(mesh_data));
+    cube_mesh.vertices.assign(mesh_data, mesh_data+ARRAY_SIZE(mesh_data));
+
+
+    // NOTE(Brett): a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
+    // all the information needed to draw the mesh onto the screen (like location etc)
     model_t model = {};
     create_model(&model, cube_mesh, &default_shader);
+
+
+    // NOTE(Brett):An entity is where we care abot things. It is the holder for the actual game object.
+    // right now an entity is nothing more than a position, id and memory inside the scene.
+    entity_t *tile_entity = request_scene_entity(&scene,
+                                                 glm::vec3(0.0f, 0.0f, 0.0f),
+                                                 &model);
+
+    tile_entity->scale = glm::vec3(50.f, 20.f, 50.f);
+
+
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -120,7 +181,7 @@ int main(int argc, char *argv[])
         }
 
         if ( controller_manager->get_keydown(SDLK_RIGHT) ) {
-        	level1.move(move_right);
+            level1.move(move_right);
         }
 
         if ( controller_manager->get_keydown(SDLK_UP) ) {
@@ -131,10 +192,12 @@ int main(int argc, char *argv[])
             level1.move(move_down);
         }
 
-        glClearColor(((float)sin(ticks)+1.f)/4.f + 0.25f, 0.0f, 0.0f, 1.0f);
+        float factor = ((float)sin(ticks)+1.f)/4.f + 0.25f;
+        glClearColor(factor, 0.0f, factor, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        draw_scene(&scene);
+        
         SDL_GL_SwapWindow(main_window);
     }
 

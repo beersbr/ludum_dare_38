@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <OpenGL/gl3.h>
+#include <map>
 
 #include <cstddef>
 
@@ -13,7 +14,7 @@
 
 #define WHITE glm::vec3(1.0f, 1.0f, 1.0f)
 #define RED   glm::vec3(1.0f, 0.0f, 0.0f)
-#define GREE  glm::vec3(0.0f, 1.0f, 0.0f)
+#define GREEN glm::vec3(0.0f, 1.0f, 0.0f)
 #define BLUE  glm::vec3(0.0f, 0.0f, 1.0f)
 #define BLACK glm::vec3(0.0f, 0.0f, 0.0f)
 
@@ -44,6 +45,9 @@ typedef struct _vertex_definition_t {
 typedef struct _shader_t {
     GLuint id;
     bool in_use;
+
+    std::map<std::string, GLint> uniform_locations;
+
 } shader_t;
 
 
@@ -77,6 +81,8 @@ typedef struct _shader_manager_t {
 
 
 void use_shader(shader_t *shader);
+
+GLint get_uniform_location(shader_t *shader, std::string name);
 
 void draw_model(model_t *model);
 

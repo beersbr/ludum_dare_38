@@ -4,14 +4,35 @@ void use_shader(shader_t *shader)
 {
     static shader_t *current_shader = NULL;
 
-    if ( shader != current_shader ) {
+    assert(shader);
 
+    if ( shader != current_shader ) {
         glUseProgram(shader->id);
         shader->in_use = true;
-        current_shader->in_use = false;
+        if ( current_shader ) {
+            current_shader->in_use = false;
+        }
         current_shader = shader;
     }
 }
+
+
+GLint get_uniform_location(shader_t *shader, std::string name)
+{
+
+    GLint location = -1;
+
+    if ( shader->uniform_locations.find(name) == shader->uniform_locations.end() ) {
+        location = glGetUniformLocation(shader->id, name.c_str());
+        shader->uniform_locations[name] = location;
+    }
+    else { 
+        location = shader->uniform_locations[name];
+    }
+
+    return location;
+}
+
 
 void draw_model(model_t *model) 
 {

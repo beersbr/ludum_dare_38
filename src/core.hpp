@@ -28,7 +28,7 @@ typedef struct _scene_t {
     std::vector<entity_t> entities_pool;
 
     std::list<entity_t*> open_entities;
-    std::list<entity_t*> alive_entities;
+    std::list<entity_t*> active_entities;
     std::list<entity_t*> dead_entities;
 
 } scene_t;
@@ -36,6 +36,10 @@ typedef struct _scene_t {
 
 void create_scene(scene_t *scene, glm::mat4 projection_matrix, glm::mat4 view_matrix);
 
+void draw_scene(scene_t *scene);
+
 entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *model);
+
+void draw_entity(entity_t *entity);
 
 #endif

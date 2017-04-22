@@ -5,7 +5,7 @@
 
 #include "level.hpp"
 
-int check_walls(tile_t tile) {
+int check_walls( tile_t tile, int width, int height ) {
 	int num_walls = 0;
 
 	if ( tile.wall_w ) { 
@@ -25,7 +25,8 @@ int check_walls(tile_t tile) {
 	}
 
 	// We don't want to close the player out, so reset the grid here
-	if( num_walls > 3 ) {
+	// Also let them always enter the edge of the map
+	if( num_walls > 3 || tile.x == width || tile.y == height ) {
 		tile.wall_w = false;
 		tile.wall_a = false;
 		tile.wall_s = false;
@@ -56,7 +57,7 @@ void level_t::create_level( int width, int height ) {
 		grid[i].x = i%grid_width;
 		grid[i].y = floor(i/grid_width);
 
-		// Add walls to the level (w, a, s, d)
+		// Add walls to the level (w, a, s, d -> signifying movement direction)
 		// WALL_CREATION_CHANCE% chance of a wall being created
 		// TODO(JP): Consider having more contiguous walls???
 
@@ -77,24 +78,22 @@ void level_t::create_level( int width, int height ) {
 		}
 
 		// Make sure the player has a way out of the room
-		check_walls(grid[i]);
+		check_walls( grid[i] );
 
 		// Ensure the boundaries are protected by walls
 		if( 0 == grid[i].x ) {
 			grid[i].wall_a = true;
 		}
-		else if ( width == grid[i].x+1) {
+		else if ( width == grid[i].x+1 ) {
 			grid[i].wall_d = true;
 		}
 
 		if( 0 == grid[i].y ) {
 			grid[i].wall_s = true;
 		}
-		else if( height == grid[i].y+1) {
+		else if( height == grid[i].y+1 ) {
 			grid[i].wall_w = true;
 		}	
-
-
 
 		std::cout << grid[i].type << "		" << 
 			grid[i].wall_w << ", " <<

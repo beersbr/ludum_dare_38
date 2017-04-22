@@ -26,3 +26,20 @@ void controller_manager_t::set_keyup(const SDL_Keycode keycode) {
 bool controller_manager_t::get_keydown(const SDL_Keycode keycode) {
     return keystates[keycode];
 }
+
+void controller_manager_t::set_mousedown(const unsigned int mousecode) {
+    mousestates[mousecode] = true;
+}
+
+void controller_manager_t::set_mouseup(const unsigned int mousecode) {
+    mousestates[mousecode] = false;
+}
+
+bool controller_manager_t::get_mousedown(const unsigned int mousecode) {
+    return mousestates[mousecode];
+}
+
+void controller_manager_t::set_cursor_position(const int x, const int y) {
+    cursor_x = x;
+    cursor_y = y;
+}

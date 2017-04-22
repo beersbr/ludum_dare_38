@@ -195,6 +195,18 @@ int main(int argc, char *argv[])
                     controller_manager->set_keydown(event.key.keysym.sym);
                     break;
                 }
+                case SDL_MOUSEBUTTONUP: {
+                	controller_manager->set_mouseup(event.button.button);
+                	break;
+                }
+                case SDL_MOUSEBUTTONDOWN: {
+                	controller_manager->set_mousedown(event.button.button);
+                	break;
+                }
+                case SDL_MOUSEMOTION: {
+                	controller_manager->set_cursor_position(event.motion.x, event.motion.y);
+                	break;
+                }
             }
         }
 
@@ -219,6 +231,15 @@ int main(int argc, char *argv[])
         if ( controller_manager->get_keydown(SDLK_SPACE) ) {
         	// attack
         	item_sword.after_attack( &enemy );
+        }
+
+        if ( controller_manager->get_mousedown(SDL_BUTTON_LEFT) ) {
+        	std::cout << controller_manager->cursor_x << ", " << controller_manager->cursor_y << " Left click" << std::endl;
+
+        }
+
+        if ( controller_manager->get_mousedown(SDL_BUTTON_RIGHT) ) {
+        	std::cout << controller_manager->cursor_x << ", " << controller_manager->cursor_y << " Right click" << std::endl;
         }
 
         // prepare scene()

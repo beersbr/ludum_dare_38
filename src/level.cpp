@@ -26,7 +26,9 @@ int check_walls( tile_t tile, int width, int height ) {
 
 	// We don't want to close the player out, so reset the grid here
 	// Also let them always enter the edge of the map
-	if( num_walls > 3 || tile.x == width || tile.y == height ) {
+	if( num_walls > 3 || 
+	   		tile.x == width || tile.y == height ||
+	   		tile.x == 0 || tile.y == 0 ) {
 		tile.wall_w = false;
 		tile.wall_a = false;
 		tile.wall_s = false;

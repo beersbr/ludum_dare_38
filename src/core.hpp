@@ -2,10 +2,12 @@
 #define CORE_HPP
 
 #include "graphics.hpp"
+#include "tile.hpp"
 #include <vector>
 #include <list>
 
 #define SCENE_ENTITY_POOL_MAX 512
+
 
 typedef struct _entity_t {
     unsigned int id;
@@ -14,8 +16,37 @@ typedef struct _entity_t {
     glm::vec3 rotation;
     glm::vec3 scale;
 
+    bool is_tile;
+    tile_t *tile;
+
+    bool is_enemy;
+    // TODO: add enemy
+
+    bool is_player;
+    // TODO: add player
+
+    bool is_item;
+
+    // std::vector<item_t> item_list;
+
     model_t *model;
 } entity_t;
+
+
+typedef void (*item_callback)(entity_t *player_entity);
+
+
+typedef struct _item_t {
+    std::string description;
+    std::string name;
+
+    item_callback before_turn;
+    item_callback after_turn;
+    item_callback before_move;
+    item_callback after_move;
+    item_callback before_attack;
+    item_callback after_attack;
+} item_t;
 
 
 typedef struct _scene_t {

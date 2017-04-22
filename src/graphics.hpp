@@ -101,4 +101,9 @@ GLuint create_shader(GLenum type, char *shader_source);
 
 void create_model(model_t *model, mesh_t mesh, shader_t *shader);
 
+// void use_texture(texture_t *texture);
+
+// GLint create_texture(texture_t *texture, )
+
+
 #endif

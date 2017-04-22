@@ -14,6 +14,9 @@
 
 #define ARRAY_SIZE(ar) (sizeof((ar))/sizeof((ar)[0]))
 
+// typedef unsigned int ld38_uint;
+// typedef unsigned long ld38_ulong;
+
 std::string read_file(char const * file_name);
 
 #endif 

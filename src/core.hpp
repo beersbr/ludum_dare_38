@@ -1,6 +1,7 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
+#include "util.hpp"
 #include "graphics.hpp"
 #include "tile.hpp"
 #include "level.hpp"
@@ -72,6 +73,37 @@ typedef struct _scene_t {
 
 } scene_t;
 
+
+typedef void (*state_transition_arrive_callback)();
+typedef void (*state_transition_depart_callback)();
+typedef void (*state_setup_callback)();
+typedef void (*state_render_callback)();
+typedef void (*state_update_callback)(unsigned long ticks);
+
+typedef struct _game_state_t {
+    unsigned long id;
+    scene_t *scene;
+
+    bool is_setup;
+    bool is_arriving;
+    bool is_departing;
+
+    state_setup_callback setup;
+    state_render_callback render;
+    state_update_callback update;
+
+    state_transition_arrive_callback transition_arrive;
+    state_transition_depart_callback transition_depart;
+
+} game_state_t;
+
+typedef struct _state_manager_t {
+    std::list<game_state_t> states;
+    game_state_t *current_state;
+} state_manager_t;
+
+
+void push_state(state_manager_t *manager, game_state_t state);
 
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,

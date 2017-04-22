@@ -48,8 +48,6 @@ int main(int argc, char *argv[])
 
     SDL_GLContext main_context = SDL_GL_CreateContext(main_window);
 
-
-    
     #ifdef _WIN32
     // glew things for windows
     #endif
@@ -171,7 +169,7 @@ int main(int argc, char *argv[])
         tile_entity->scale = tile_size;
     }
 
-    glm::vec3 player_size = glm::vec3(35.0f, 50.0f, 30.f);
+    glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
     glm::vec3 camera_lookat = glm::vec3((8.0*tile_size.x)/2.f,
                                         0.0f,
@@ -180,11 +178,18 @@ int main(int argc, char *argv[])
 
     glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 350.f, 300.f);
 
-    scene.request_scene_entity(&scene,
-                               );
+    entity_t *player = request_scene_entity(&scene,
+                                            glm::vec3(tile_size.x/2.f,
+                                                      tile_size.y+player_size.y/2.f,
+                                                      tile_size.z/2.f),
+                                            &model);
+
+    player->scale = player_size;
 
     scene.camera_lookat = camera_lookat;
     scene.camera_position = camera_position;
+
+    
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -235,7 +240,6 @@ int main(int argc, char *argv[])
             }
         }
         float ticks = SDL_GetTicks()/500.f;
-
 
         if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
             glm::vec2 delta = controller_manager->cursor - controller_manager->last_cursor;

@@ -177,10 +177,11 @@ int main(int argc, char *argv[])
                                         0.0f,
                                         (8.0*tile_size.z)/2.f);
 
-    static float MAX_XZ_DISTANCE = 300.f;
-    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 350.f, MAX_XZ_DISTANCE);
-    // scene.request_scene_entity(&scene);
 
+    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 350.f, 300.f);
+
+    scene.request_scene_entity(&scene,
+                               );
 
     scene.camera_lookat = camera_lookat;
     scene.camera_position = camera_position;
@@ -236,16 +237,11 @@ int main(int argc, char *argv[])
         float ticks = SDL_GetTicks()/500.f;
 
 
-
         if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
             glm::vec2 delta = controller_manager->cursor - controller_manager->last_cursor;
-
             glm::vec3 eye = scene.camera_position - scene.camera_lookat;
-
             glm::vec3 new_eye = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
-
             scene.camera_position = scene.camera_lookat + new_eye;
-
         }
 
         if ( controller_manager->get_keydown(SDLK_a) ) {

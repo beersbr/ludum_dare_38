@@ -17,6 +17,8 @@ typedef struct _level_t {
 	void create_level( int width, int height );
 	int query_location( int location_x, int location_y );
 	int move( Movement move );
+
+	
 } level_t;
 
 #endif

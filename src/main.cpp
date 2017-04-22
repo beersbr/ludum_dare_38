@@ -19,6 +19,8 @@
 #include "graphics.hpp"
 #include "core.hpp"
 
+#include "items/item_sword.hpp"
+
 static int WIDTH  = 800;
 static int HEIGHT = 600;
 
@@ -156,6 +158,18 @@ int main(int argc, char *argv[])
     level_t level1;
     level1.create_level(3,4);
 
+    entity_t enemy;
+    enemy.is_enemy = true;
+    enemy.enemy_health = 100;
+
+    // playing with item stuff
+    entity_t item_sword;
+    item_sword.is_item = true;
+    item_sword.item_name = "Basic sword";
+    item_sword.item_description = "Deals damage to enermies";
+    item_sword.after_attack = &sword_deal_damage;
+
+
     while ( running ) { 
         while ( SDL_PollEvent(&event) ) {
             switch(event.type) {
@@ -190,6 +204,11 @@ int main(int argc, char *argv[])
 
         if ( controller_manager->get_keydown(SDLK_s) ) {
             level1.move(move_down);
+        }
+
+        if ( controller_manager->get_keydown(SDLK_SPACE) ) {
+        	// attack
+        	item_sword.after_attack( &enemy );
         }
 
         // prepare scene()

@@ -96,19 +96,61 @@ void level_t::create_level( int width, int height ) {
 		else if( height == grid[i].y+1 ) {
 			grid[i].wall_w = true;
 		}	
-
-		std::cout << grid[i].type << "		" << 
-			grid[i].wall_w << ", " <<
-			grid[i].wall_a << ", " << 
-			grid[i].wall_s << ", " << 
-			grid[i].wall_d << 
-			"	x: " << grid[i].x <<
-			"	y: " << grid[i].y << 
-			std::endl;
 	}
+
+	print_level();
 
 
 	// TODO(JP): add stuff to make level interesting
+}
+
+// Add a wall after the creation of the level
+// This will also add a wall to the adjacent tile
+void level_t::create_wall( int x, int y, char wall ) {
+	int index = grid_width*y + x;
+	int adjacent_index;
+	tile_t tile = grid[index];
+
+	switch( wall ) {
+		case 'w':
+			if( grid_height > y+1 ) {
+				adjacent_index = grid_width*(y+1) + x;
+				grid[adjacent_index].wall_s = true;
+			}
+
+			grid[index].wall_w = true;
+			std::cout << "adding w" << std::endl;
+			break;
+		case 's':
+			if( 0 <= y-1 ) {
+				adjacent_index = grid_width*(y-1) + x;
+				grid[adjacent_index].wall_w = true;
+			}
+
+			grid[index].wall_s = true;
+			std::cout << "adding a" << std::endl;
+			break;
+		case 'a':
+			if( 0 <= x-1 ) {
+				adjacent_index = grid_width*y + (x-1);
+				grid[adjacent_index].wall_d = true;
+			}
+
+			grid[index].wall_a = true;
+			std::cout << "adding s" << std::endl;
+			break;
+		case 'd':
+			if( grid_height > x+1 ) {
+				adjacent_index = grid_width*y + (x+1);
+				grid[adjacent_index].wall_a = true;
+			}
+
+			grid[index].wall_d = true;
+			std::cout << "adding d" << std::endl;
+			break;
+		default:
+			std::cout << "Invalid wall type" << std::endl;
+	}
 }
 
 
@@ -161,4 +203,16 @@ int level_t::move( Movement move ) {
 	return success;
 }
 
+void level_t::print_level() {
 
+	for( int i=0; i<grid_width*grid_height; i++ ) {
+		std::cout << grid[i].type << "		" << 
+			grid[i].wall_w << ", " <<
+			grid[i].wall_a << ", " << 
+			grid[i].wall_s << ", " << 
+			grid[i].wall_d << 
+			"	x: " << grid[i].x <<
+			"	y: " << grid[i].y << 
+			std::endl;
+	}
+}

@@ -3,12 +3,14 @@
 
 #include <vector>
 
-#include "room.hpp"
+#include "tile.hpp"
 
 enum Movement { move_left, move_right, move_up, move_down };
 
 typedef struct level {
-	std::vector<std::vector<int> > grid;
+	int grid_width;
+	int grid_height;
+	std::vector<tile_t> grid;
 
 	void create_level( int width, int height );
 	int query_location( int location_x, int location_y );

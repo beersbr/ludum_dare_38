@@ -4,32 +4,34 @@
 void level::create_level( int width, int height ) {
 	int count = 0;
 
-	grid.resize( width, std::vector<int>(height) );
+	grid_width = width;
+	grid_height = height;
+
+	grid.resize( width*height );
 
 	// TODO: add stuff to make level interesting
-	for( int i=0; i<width; i++ ) {
-		for( int j=0; j<height; j++)  {
-			grid[i][j] = count;
-			count++;
-		}
+	for( int i=0; i<width*height; i++ ) {
+		grid[i].type = count;
+		count++;
 	}
 }
 
 // Query a coordinate on the map to check for events at that location
 int level::query_location( int location_x, int location_y ) {
 	int level_event = 0;
+	int index = grid_width*location_y + location_x;
 
-	if ( grid.size() < location_x ) {
+	if ( grid_width< location_x ) {
 		level_event = -1;
 		std::cout << "invalid location x" << std::endl;
 	}
-	else if ( grid[0].size() < location_y ) {
+	else if ( grid_height < location_y ) {
 		level_event = -1;
 		std::cout << "invalid location y" << std::endl;
 	}
 	else {
 		// TODO: check for other things
-		level_event = grid[location_x][location_y];
+		level_event = grid[index].type;
 	}
 
 	return level_event;

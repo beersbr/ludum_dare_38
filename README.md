@@ -99,8 +99,15 @@ We also need a way to show text in the game... I can probably handle that tomorr
 
 ## Regular TODO
 
+* draw character as a tall box and have him move around the tiles with the keyboard
+* draw the tiles with respect to the level
+* need something to ddeal with the level above a scene. what sets up the scenes? A game manager that reads from a text file? that could be nice. Or just reads from a set of instructions that we just write right into our c files.
 * Add text/font rendering things and functions to do it.
 * add state manager to manage game states (paused, menu)
 	* be able to transition between state nicely via animations ( this means that we will need time passed around [SDL_TICKS() should work fine for us ])
+	* states are also when a character is attacking/moving/enemy moving/leaving level/entering level. Those things will take time and we will need to handle input etc correctly to make the game move smoothly.
+
 * It would be nice to be able to move the camera around via the mouse (perhaps holding the middle mouse button will allow the user to move the camera around the center)
+* add a light and the code to deal with that so things look a little nicer
+* add texture handling so we can add images to the tiles
 

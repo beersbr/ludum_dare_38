@@ -1,7 +1,9 @@
 #version 330 core
 
-in fg_color;
+in vec3 fg_color;
+out vec4 color;
 
 void main(void) {
-	color = fg_color;
+	color = vec4(fg_color, 1.0);
 }
+

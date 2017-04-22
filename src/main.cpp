@@ -44,6 +44,11 @@ int main(int argc, char *argv[])
     #ifdef _WIN32
     // glew things for windows
     #endif
+    
+    shader_t default_shader = {};
+    create_shader_program(&default_shader,
+                          "shaders/simple.vertex.glsl",
+                          "shaders/simple.fragment.glsl");
 
     SDL_GL_SetSwapInterval(0);
 

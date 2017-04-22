@@ -75,7 +75,7 @@ typedef struct _scene_t {
 
 
 GLuint create_shader(GLenum type, char *shader_source);
-void create_shader(shader_t *shader, char *vertex_shader, char *fragment_shader);
+void create_shader_program(shader_t *shader, char const * vertex_shader, char const * fragment_shader);
 
 void create_model(model_t *model, mesh_t mesh, shader_t *shader);
 

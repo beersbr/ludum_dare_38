@@ -17,7 +17,7 @@ cp -r $SRC_DIR/shaders/* $BUILD_DIR/shaders/
 pushd $SRC_DIR
     clang++ main.cpp graphics.cpp controller_manager.cpp level.cpp util.cpp core.cpp \
     -I$THIRDPARTY_DIR"/include" -F$THIRDPARTY_DIR"/frameworks" -framework SDL2 -framework opengl \
-    -o $BUILD_DIR"/ludum_dare_38" \
+    -o $BUILD_DIR"/ludum_dare_38" -std=c++11 \
     -rpath @executable_path/ \
     -D SLOW
 popd

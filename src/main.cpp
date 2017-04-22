@@ -12,6 +12,11 @@
 #include <OpenGL/gl3.h>
 #endif
 
+#include <map> 
+
+#include "controller_manager.hpp"
+#include "controller_manager.cpp"
+
 int main(int argc, char *argv[])
 {
 	if ( SDL_Init(SDL_INIT_EVERYTHING) < 0 ) { 
@@ -49,11 +54,37 @@ int main(int argc, char *argv[])
 	while ( running ) { 
 		while ( SDL_PollEvent(&event) ) {
 			switch(event.type) {
-			case SDL_QUIT: 
-				running = false;
-				break;
-			}
+    			case SDL_QUIT: {
+    				running = false;
+    				break;
+    			}
+                case SDL_KEYUP: {
+                    controller_manager->set_keyup(event.key.keysym.sym);
+                    break;
+                }
+                case SDL_KEYDOWN: {
+                    controller_manager->set_keydown(event.key.keysym.sym);
+                    break;
+                }
+            }
+
 		}
+
+        if ( controller_manager->get_keydown(SDLK_LEFT)) {
+            std::cout << "Pressed left" << std::endl;
+        }
+
+        if ( controller_manager->get_keydown(SDLK_RIGHT)) {
+            std::cout << "Pressed right" << std::endl;
+        }
+
+        if ( controller_manager->get_keydown(SDLK_UP)) {
+            std::cout << "Pressed up" << std::endl;
+        }
+
+        if ( controller_manager->get_keydown(SDLK_DOWN)) {
+            std::cout << "Pressed down" << std::endl;
+        }
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

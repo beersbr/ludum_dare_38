@@ -1,0 +1,6 @@
+build/*.obj
+*.ilk
+*.pdb
+.DS_Store
+.vs
+build/ludum_dare_38 

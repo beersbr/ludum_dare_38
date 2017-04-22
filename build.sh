@@ -11,6 +11,9 @@ THIRDPARTY_DIR=$BASE_DIR"/thirdparty"
 
 cp -r thirdparty/frameworks/* $BUILD_DIR/
 
+mkdir -p $BUILD_DIR/shaders 
+cp -r src/shaders/* $BUILD_DIR/shaders/
+
 pushd $SRC_DIR
     clang++ main.cpp graphics.cpp controller_manager.cpp util.cpp \
     -I$THIRDPARTY_DIR"/include" -F$THIRDPARTY_DIR"/frameworks" -framework SDL2 -framework opengl -o $BUILD_DIR"/ludum_dare_38" \

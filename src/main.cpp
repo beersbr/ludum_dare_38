@@ -15,6 +15,7 @@
 #include <map> 
 
 #include "controller_manager.hpp"
+#include "level.hpp"
 #include "graphics.hpp"
 
 static int WIDTH  = 800;
@@ -57,6 +58,12 @@ int main(int argc, char *argv[])
     static bool running = true;
     static SDL_Event event = {};
 
+    level_t level1;
+
+    level1.create_level(3,4);
+
+    std::cout << "Level event: " << level1.grid[1][2] << std::endl;
+
     while ( running ) { 
         while ( SDL_PollEvent(&event) ) {
             switch(event.type) {
@@ -75,23 +82,22 @@ int main(int argc, char *argv[])
             }
         }
 
-
         float ticks = SDL_GetTicks()/500.f;
 
-        if ( controller_manager->get_keydown(SDLK_LEFT)) {
-            std::cout << "Pressed left" << std::endl;
+        if ( controller_manager->get_keydown(SDLK_LEFT) ) {
+            level1.move(move_left);
         }
 
-        if ( controller_manager->get_keydown(SDLK_RIGHT)) {
-            std::cout << "Pressed right" << std::endl;
+        if ( controller_manager->get_keydown(SDLK_RIGHT) ) {
+        	level1.move(move_right);
         }
 
-        if ( controller_manager->get_keydown(SDLK_UP)) {
-            std::cout << "Pressed up" << std::endl;
+        if ( controller_manager->get_keydown(SDLK_UP) ) {
+            level1.move(move_up);
         }
 
-        if ( controller_manager->get_keydown(SDLK_DOWN)) {
-            std::cout << "Pressed down" << std::endl;
+        if ( controller_manager->get_keydown(SDLK_DOWN) ) {
+            level1.move(move_down);
         }
 
         glClearColor(((float)sin(ticks)+1.f)/4.f + 0.25f, 0.0f, 0.0f, 1.0f);

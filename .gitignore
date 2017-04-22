@@ -3,4 +3,4 @@ build/*.obj
 *.pdb
 .DS_Store
 .vs
-build/ludum_dare_38 
+build/*

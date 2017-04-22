@@ -1,19 +1,31 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
+
 #include "level.hpp"
 
 void level::create_level( int width, int height ) {
 	int count = 0;
+
+	srand( time(NULL) );
 
 	grid_width = width;
 	grid_height = height;
 
 	grid.resize( width*height );
 
-	// TODO: add stuff to make level interesting
-	for( int i=0; i<width*height; i++ ) {
-		grid[i].type = count;
-		count++;
+	// Create entrance on bottom row of grid
+	grid[rand() % width].type = level_entrance;
+
+	// Create exit at top row of grid
+	grid[rand() % width + (width*height-width)]. type = level_exit;
+
+
+	for( int i=0; i<grid_width*grid_height; i++) {
+		std::cout << grid[i].type << std::endl;
 	}
+
+	// TODO: add stuff to make level interesting
 }
 
 // Query a coordinate on the map to check for events at that location

@@ -49,10 +49,10 @@ void level_t::create_level( int width, int height ) {
 	grid.resize( width*height );
 
 	// Create entrance on bottom row of grid
-	grid[rand() % width].type = level_entrance;
+	grid[rand() % width].type = TILE_ENTRANCE;
 
 	// Create exit at top row of grid
-	grid[rand() % width + (width*height-width)].type = level_exit;
+	grid[rand() % width + (width*height-width)].type = TILE_EXIT;
 
 
 	for( int i=0; i<grid_width*grid_height; i++) {
@@ -156,7 +156,7 @@ void level_t::create_wall( int x, int y, char wall ) {
 
 // Query a coordinate on the map to check for events at that location
 int level_t::query_location( int location_x, int location_y, char move ) {
-	int level_event = 0;
+	int tile_event = 0;
 	int index;
 	int attempt_index;
 	int attempt_x = location_x;
@@ -167,28 +167,28 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 	switch ( move ) {
 		case 'w':
 			if ( grid[index].wall_w ) {
-				level_event = -1;
+				tile_event = TILE_INVALID;
 			} 
 
 			attempt_y -= 1;
 			break;
 		case 'a':
 			if ( grid[index].wall_a ) {
-				level_event = -1;
+				tile_event = TILE_INVALID;
 			} 
 
 			attempt_x -= 1;
 			break;
 		case 's':
 			if ( grid[index].wall_s ) {
-				level_event = -1;
+				tile_event = TILE_INVALID;
 			} 
 
 			attempt_y += 1;
 			break;
 		case 'd':
 			if ( grid[index].wall_d ) {
-				level_event = -1;
+				tile_event = TILE_INVALID;
 			} 
 
 			attempt_x += 1;
@@ -201,52 +201,22 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 
 	std::cout << "Trying: " << attempt_x << " " << attempt_y << std::endl;
 
-	if ( 0 == level_event ) {
+	if ( 0 == tile_event ) {
 		if ( attempt_x >= grid_width || attempt_x < 0 ) {
-			level_event = -1;
-			std::cout << "invalid location x" << std::endl;
+			tile_event = TILE_INVALID;
 		}
 		else if ( attempt_y >= grid_height || attempt_y < 0) {
-			level_event = -1;
-			std::cout << "invalid location y" << std::endl;
+			tile_event = TILE_INVALID;
 		}
 		else {
 			// TODO(JP): check for other things
-			level_event = grid[attempt_index].type;
+			tile_event = grid[attempt_index].type;
 		}
 	}
 
-	std::cout << "Level event: " << level_event << std::endl;
-	return level_event;
+	return tile_event;
 }
 
-
-// TODO(JP): we'll need the location of the character for this to be useful at all
-// Move main character left, right, up, or down on the grid if possible
-int level_t::move( Movement move ) {
-	int success = 0; 
-
-	// TODO: return something signifying an event at the new location
-
-	switch ( move ) {
-		case move_left:
-			std::cout << "Move Left" << std::endl;
-			break;
-		case move_right:
-			std::cout << "Move Right" << std::endl;
-			break;
-		case move_up:
-			std::cout << "Move Up" << std::endl;
-			break;
-		case move_down:
-			std::cout << "Move Down" << std::endl;
-			break;
-		default:
-			success = -1;
-	}
-
-	return success;
-}
 
 void level_t::print_level() {
 

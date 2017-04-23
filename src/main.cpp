@@ -175,10 +175,10 @@ int main(int argc, char *argv[])
 
         std::cout << x_offset << " " << z_offset << std::endl;
 
-        if ( tile.type == level_entrance ) {
+        if ( tile.type == TILE_ENTRANCE ) {
             y_offset -= 20.f;
         }
-        if ( tile.type == level_exit ) {
+        if ( tile.type == TILE_EXIT ) {
             y_offset += 20.f;
         }
 

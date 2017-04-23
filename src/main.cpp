@@ -23,6 +23,7 @@
 
 #include "items/item_sword.hpp"
 
+static char TITLE[] = "LUDUM DARE 38 :: A SMALL WORLD";
 static int WIDTH  = 800;
 static int HEIGHT = 600;
 
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    SDL_Window *main_window = SDL_CreateWindow("LUDUM DARE 38 :: A SMALL WORLD",
+    SDL_Window *main_window = SDL_CreateWindow(TITLE,
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
                                    WIDTH, HEIGHT, 
@@ -59,17 +60,6 @@ int main(int argc, char *argv[])
     create_shader_program(&default_shader,
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
-
-    // NOTE(Brett):Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
-    // point
-    scene_t scene = {};
-
-    glm::mat4 projection_matrix = glm::ortho((float)WIDTH/2.f*-1.f,
-                                             (float)WIDTH/2.f,
-                                             (float)HEIGHT/2.f*-1.f,
-                                             (float)HEIGHT/2.f,
-                                             0.01f,
-                                             400.f);
 
     // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
     // here but that is wher eit is right now.
@@ -129,14 +119,26 @@ int main(int argc, char *argv[])
     cube_mesh.vertices.assign(mesh_data, mesh_data+ARRAY_SIZE(mesh_data));
 
 
-    create_scene(&scene, projection_matrix,
-                 glm::vec3(0.0f, 500.f, 500.f),
-                 glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::mat4 projection_matrix = glm::ortho((float)WIDTH/2.f*-1.f,
+                                             (float)WIDTH/2.f,
+                                             (float)HEIGHT/2.f*-1.f,
+                                             (float)HEIGHT/2.f,
+                                             0.01f,
+                                             450.f);
+
 
     // NOTE(Brett): a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
     // all the information needed to draw the mesh onto the screen (like location etc)
     model_t model = {};
     create_model(&model, cube_mesh, &default_shader);
+
+
+    // NOTE(Brett):Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
+    // point
+    scene_t scene = {};
+    create_scene(&scene, projection_matrix,
+                 glm::vec3(0.0f, 500.f, 500.f),
+                 glm::vec3(0.0f, 0.0f, 0.0f));
 
     // NOTE(Brett):prepare the level
     level_t level1;
@@ -248,17 +250,6 @@ int main(int argc, char *argv[])
     static bool running = true;
     static SDL_Event event = {};
 
-    // entity_t enemy;
-    // enemy.is_enemy = true;
-    // enemy.enemy_health = 100;
-
-    // playing with item stuff
-    // entity_t item_sword;
-    // item_sword.is_item = true;
-    // item_sword.item_name = "Basic sword";
-    // item_sword.item_description = "Deals damage to enermies";
-    // item_sword.after_attack = &sword_deal_damage;
-
     while ( running ) { 
         controller_manager->last_cursor = controller_manager->cursor;
 
@@ -291,31 +282,21 @@ int main(int argc, char *argv[])
             }
         }
 
-        // plyaer action
-        // player animation
-        // turn change 
-
+        // NOTE(Brett):Update the entities (the scene)
         STATE_FUNCTION_ID id = game_state.update(&scene, SDL_GetTicks());
         game_state.update = get_state(id);
-        
-        float ticks = SDL_GetTicks()/500.f;
-
-        float factor = ((float)sin(ticks)+1.f);
-        float color_f = 0.5f;
-        glClearColor(color_f, 0.0f, color_f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         scene.light1_position = scene.camera_position;
 
         glm::vec3 inverse_camera_direction = scene.camera_position - scene.camera_lookat;
         inverse_camera_direction.y = 0.f;
-        inverse_camera_direction = glm::normalize(inverse_camera_direction);
-        inverse_camera_direction *= 300.f;
+        inverse_camera_direction = glm::normalize(inverse_camera_direction) * 300.f;
         inverse_camera_direction.y = 300.f;
 
+        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         scene.light1_position = scene.camera_lookat + inverse_camera_direction;
-
-        // scene.light1_position.y += factor*500.f;
         draw_scene(&scene);
         
         SDL_GL_SwapWindow(main_window);

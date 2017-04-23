@@ -163,9 +163,7 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 	int attempt_y = location_y;
 
 	index = grid_width*location_y + location_x;
-	
-	std::cout << "HERE" << std::endl;
-	
+		
 	switch ( move ) {
 		case 'w':
 			if ( grid[index].wall_w ) {

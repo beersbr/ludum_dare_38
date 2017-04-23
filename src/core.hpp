@@ -16,9 +16,7 @@
 #define CAMERA_OFFSET glm::vec3(25.0f, 250.f, 125.f)
 
 
-typedef float (*animation_function)(unsigned long start_tick,
-                                    unsigned long current_tick,
-                                    unsigned long duration_ticks);
+typedef float (*animation_function)(float t, float d);
 
 typedef struct _animtion_t {
     bool is_done;
@@ -107,11 +105,11 @@ void create_animation(animation_t *animation,
                       unsigned long duration,
                       animation_function fn);
 
-float eval_animation(unsigned long current_tick);
+float eval_animation(animation_t * animation, unsigned long current_tick);
 
-float linear(unsigned long start_tick,
-             unsigned long current_tick,
-             unsigned long duration_ticks);
+float linear(float t, float d);
+float ease_out(float t, float d);
+float ease_out_circ(float t, float d);
 
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,

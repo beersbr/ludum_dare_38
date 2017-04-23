@@ -106,8 +106,7 @@ void create_animation(animation_t *animation,
 
 float eval_animation(animation_t *animation, unsigned long current_tick)
 {
-    float result = animation->function(animation->start_tick,
-                                       current_tick,
+    float result = animation->function(current_tick - animation->start_tick,
                                        animation->duration);
 
     if ( result >= 1.0f ) {
@@ -119,10 +118,24 @@ float eval_animation(animation_t *animation, unsigned long current_tick)
 }
 
 
-float linear(unsigned long start_tick,
-             unsigned long current_tick,
-             unsigned long duration_ticks)
+float linear(float t, float d)
 {
 
-    return (current_tick - start_tick / duration_ticks);
+    return t / (float)d;
 }
+
+
+float ease_out(float t, float d)
+{
+    t /= d;
+    return -1.f * t * (t - 2);
+}
+
+
+float ease_out_circ(float t, float d)
+{
+    t /= d;
+    t--;
+    return sqrtf(1 - t*t);
+}
+

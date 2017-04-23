@@ -66,8 +66,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
             return PLAYER_MOVE_ANIMATION;
         }
     }
-
-    if ( controller_manager->get_keydown(SDLK_d) ) {
+    else if ( controller_manager->get_keydown(SDLK_d) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'd') != TILE_INVALID ) {
@@ -103,8 +102,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
             return PLAYER_MOVE_ANIMATION;
         }
     }
-
-    if ( controller_manager->get_keydown(SDLK_w) ) {
+    else if ( controller_manager->get_keydown(SDLK_w) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'w') != TILE_INVALID ) {
@@ -139,8 +137,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
             return PLAYER_MOVE_ANIMATION;
         }
     }
-
-    if ( controller_manager->get_keydown(SDLK_s) ) {
+    else if ( controller_manager->get_keydown(SDLK_s) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    's') != TILE_INVALID ) {
@@ -175,6 +172,8 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
             return PLAYER_MOVE_ANIMATION;
         }   
     }
+
+    
 
     return PLAYER_ACTION;
 }

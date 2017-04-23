@@ -26,7 +26,6 @@ typedef struct _animtion_t {
     animation_function function;
 } animation_t;
 
-
 typedef struct _entity_t {
     unsigned int id;
 
@@ -80,6 +79,7 @@ typedef struct _entity_t {
 typedef struct _scene_t {
 
 	unsigned int id;
+    std::string level_name;
 
     glm::mat4 projection_matrix;
 
@@ -116,12 +116,12 @@ float ease_out_circ(float t, float d);
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,
                   glm::vec3 camera_location,
-                  glm::vec3 camera_lookat);
+                  glm::vec3 camera_lookat,
+                  glm::vec2 level_size);
 
 void draw_scene(scene_t *scene);
 
 entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *model);
-void return_scene_entity(scene_t *scene, entity_t *entity);
 
 void draw_entity(entity_t *entity);
 

@@ -54,7 +54,9 @@ int main(int argc, char *argv[])
     #ifdef _WIN32
     // glew things for windows
     #endif
-    
+
+
+
     // NOTE(Brett):This is the default shader, it doesnt do anything super interesting right now... and its on the stack
     // TODO(Brett):We may need a shader maanger
     shader_t default_shader = {};
@@ -164,82 +166,10 @@ int main(int argc, char *argv[])
     scene_t scene = {};
     create_scene(&scene, projection_matrix,
                  glm::vec3(0.0f, 500.f, 500.f),
-                 glm::vec3(0.0f, 0.0f, 0.0f));
+                 glm::vec3(0.0f, 0.0f, 0.0f),
+                 glm::vec2(8.f, 8.f));
 
-    // NOTE(Brett):prepare the level
-    level_t level1;
-    level1.create_level(8,8);
-    level1.create_wall( 4, 3, 'w' );
-    level1.create_wall( 1, 2, 'a' );
-    level1.create_wall( 6, 7, 's' );
-    level1.create_wall( 5, 1, 'd' );
-    level1.print_level();
-
-    for( int offset = 0; offset < level1.grid.size(); ++offset ) {
-        tile_t tile = level1.grid[offset];
-
-        float x_offset = tile.x * TILE_SIZE.x + TILE_SIZE.x/2.f;
-        float z_offset = tile.y * TILE_SIZE.z + TILE_SIZE.z/2.f;
-        float y_offset = 0.f;
-
-        std::cout << x_offset << " " << z_offset << std::endl;
-
-        if ( tile.type == TILE_ENTRANCE ) {
-            y_offset -= 20.f;
-        }
-        if ( tile.type == TILE_EXIT ) {
-            y_offset += 20.f;
-        }
-
-        // NOTE(Brett):An entity is where we care abot things. It is the holder for the actual game object.
-        // right now an entity is nothing more than a position, id and memory inside the scene.
-        entity_t *tile_entity = request_scene_entity(&scene,
-                                                     glm::vec3(x_offset, y_offset, z_offset),
-                                                     &floor_model);
-
-        if ( tile.wall_s ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
-                                                       glm::vec3(x_offset, 55.f/2.f, z_offset+25.f-(5.0/2.f)),
-                                                       &wall_model);
-
-            tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
-            tile_wall->is_static = true;
-
-        }
-
-        if ( tile.wall_w ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
-                                                       glm::vec3(x_offset, 55.f/2.f, z_offset-25.f+(5.0/2.f)),
-                                                       &wall_model);
-
-            tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
-            tile_wall->is_static = true;
-
-        }
-
-        if ( tile.wall_a ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
-                                                       glm::vec3(x_offset-25.f+(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &wall_model);
-
-            tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
-            tile_wall->is_static = true;
-
-        }
-
-        if ( tile.wall_d ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
-                                                       glm::vec3(x_offset+25.f-(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &wall_model);
-
-            tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
-            tile_wall->is_static = true;
-
-        }
-
-        std::cout << tile_entity->id << std::endl;
-        tile_entity->scale = TILE_SIZE;
-    }
+    
 
     glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
@@ -281,7 +211,7 @@ int main(int argc, char *argv[])
 
     scene.camera_lookat   = camera_lookat;
     scene.camera_position = camera_position;
-    scene.level           = &level1;
+    // scene.level           = &level1;
     scene.player          = player;
 
     game_state_t game_state = {};

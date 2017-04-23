@@ -357,6 +357,13 @@ int main(int argc, char *argv[])
                     1.f,
                     projection_matrix,
                     view_matrix);
+
+        render_text("HELLO WORLD 2",
+                    glm::vec3(-380.f, -300.0f, -1.0f),
+                    WHITE,
+                    1.f,
+                    projection_matrix);
+
         
         SDL_GL_SwapWindow(main_window);
     }

@@ -137,39 +137,56 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
             std::cout << "Delta x: " << delta_x << " Delta y: " << delta_y << std::endl;
 
             if( std::abs(delta_x) > std::abs(delta_y) ) {
-                if( 0 > delta_x ) {
-                    enemy->level_coordinate.x -= 1;
 
-                    enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position   = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                    create_animation(&enemy->animation, ticks, 300, ease_out_circ);
-                    return ENEMY_MOVE_ANIMATION;
+                if( 0 < delta_x ) {
+                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'd') == 0 ) {
+                        enemy->level_coordinate.x += 1;
+
+                        enemy->animation_start_position = enemy->position;
+                        enemy->animation_end_position   = enemy->position + glm::vec3(+1.f * TILE_SIZE.x, 0.0f, 0.0f);
+                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        return ENEMY_MOVE_ANIMATION;
+                    }
                 }
                 else {
-                    enemy->level_coordinate.x += 1;
+                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'a') == 0 ) {
+                        enemy->level_coordinate.x -= 1;
 
-                    enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                    create_animation(&enemy->animation, ticks, 300, ease_out_circ);
-                    return ENEMY_MOVE_ANIMATION;
+                        enemy->animation_start_position = enemy->position;
+                        enemy->animation_end_position   = enemy->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
+                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        return ENEMY_MOVE_ANIMATION;
+                    }
                 }
             }
             else {
                 if( 0 > delta_y ) {
-                    enemy->level_coordinate.y -= 1;
+                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'w') == 0 ) {
+                        enemy->level_coordinate.y -= 1;
 
-                    enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
-                    create_animation(&enemy->animation, ticks, 300, ease_out_circ);
-                    return ENEMY_MOVE_ANIMATION;
+                        enemy->animation_start_position = enemy->position;
+                        enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        return ENEMY_MOVE_ANIMATION;
+                    }
                 }
                 else {
-                    enemy->level_coordinate.y += 1;
+                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   's') == 0 ) {
+                        enemy->level_coordinate.y += 1;
 
-                    enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);
-                    create_animation(&enemy->animation, ticks, 300, ease_out_circ);
-                    return ENEMY_MOVE_ANIMATION;
+                        enemy->animation_start_position = enemy->position;
+                        enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);
+                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        return ENEMY_MOVE_ANIMATION;
+                    }
                 }
             }
         }
@@ -195,8 +212,6 @@ STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {
 
 STATE_FUNCTION_ID enemy_move_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;
-
-    std::cout << "Moving enemy" << std::endl;
 
     for(int i=0; i<scene->entities_pool.size(); i++) {
         if(!(scene->entities_pool[i].is_enemy)) {

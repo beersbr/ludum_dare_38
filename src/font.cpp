@@ -31,7 +31,7 @@ void setup_text_renderer(texture_t *texture, shader_t *shader, char * font_path 
             exit(1);
         }
 
-        // create_texture
+        
     }
 
 

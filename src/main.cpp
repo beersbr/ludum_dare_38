@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                                              (float)HEIGHT/2.f*-1.f,
                                              (float)HEIGHT/2.f,
                                              0.01f,
-                                             10000.f);
+                                             400.f);
 
     // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
     // here but that is wher eit is right now.

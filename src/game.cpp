@@ -5,15 +5,14 @@ void update_player(scene_t *scene, unsigned int ticks)
     entity_t *player = scene->player;
 
     if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
-        glm::vec2 delta = controller_manager->cursor - controller_manager->last_cursor;
-        glm::vec3 eye = scene->camera_position - scene->camera_lookat;
-        glm::vec3 new_eye = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::vec2 delta        = controller_manager->cursor - controller_manager->last_cursor;
+        glm::vec3 eye          = scene->camera_position - scene->camera_lookat;
+        glm::vec3 new_eye      = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
         scene->camera_position = scene->camera_lookat + new_eye;
     }
     else { 
         scene->camera_position = scene->camera_lookat + CAMERA_OFFSET;
     }
-
 
     if ( controller_manager->get_keydown(SDLK_a) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
@@ -51,7 +50,7 @@ void update_player(scene_t *scene, unsigned int ticks)
             player->position += glm::vec3(0.0f, 0.0f, 1 * TILE_SIZE.z);
             player->level_coordinate.y += 1;
         }
-
     }
+
 
 }

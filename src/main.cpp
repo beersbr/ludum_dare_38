@@ -346,6 +346,17 @@ int main(int argc, char *argv[])
         
         scene.light1_position = scene.camera_lookat + inverse_camera_direction;
         draw_scene(&scene);
+
+        glm::mat4 view_matrix = glm::lookAt(scene.camera_position,
+                                            scene.camera_lookat,
+                                            glm::vec3(0.0f, 1.0f, 0.0f));
+
+        render_text("HELLO WORLD",
+                    glm::vec3(0.f, 150.0f, 0.0f),
+                    WHITE,
+                    1.f,
+                    projection_matrix,
+                    view_matrix);
         
         SDL_GL_SwapWindow(main_window);
     }

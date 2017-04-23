@@ -112,7 +112,8 @@ void create_texture_raw(texture_t *texture,
                         GLvoid *bytes,
                         GLenum ex_internal_format = GL_RGBA,
                         GLenum ex_format          = GL_BGRA,
-                        GLenum ex_type            = GL_UNSIGNED_BYTE);
+                        GLenum ex_type            = GL_UNSIGNED_BYTE,
+                        GLenum ex_wrap            = GL_REPEAT );
 
 void use_texture(texture_t *texture, GLint unit);
 

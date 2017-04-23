@@ -10,5 +10,6 @@ out vec4 color;
 void main() 
 {
 	vec4 alpha = vec4(1.0, 1.0, 1.0, texture(u_image, fg_uv).r);
-	color = vec4(color.rgb, 1.0) * alpha;
+	// color = vec4(color.rgb, 1.0) * alpha;
+	color = vec4(1.0f, 1.0f, 1.0f, 1.0);
 }

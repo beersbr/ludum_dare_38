@@ -297,8 +297,9 @@ int main(int argc, char *argv[])
 
 
         if ( controller_manager->get_keydown(SDLK_a) ) {
-            if ( level1.query_location(player->level_coordinate.x-1,
-                                       player->level_coordinate.y) == 0 ) {
+            if ( level1.query_location(player->level_coordinate.x,
+                                       player->level_coordinate.y,
+                                       'a') == 0 ) {
                 player->position += glm::vec3(-1 * tile_size.x, 0.0f, 0.0f);
                 player->level_coordinate.x -= 1;
             }
@@ -306,8 +307,9 @@ int main(int argc, char *argv[])
         }
 
         if ( controller_manager->get_keydown(SDLK_d) ) {
-            if ( level1.query_location(player->level_coordinate.x+1,
-                                       player->level_coordinate.y) == 0 ) {
+            if ( level1.query_location(player->level_coordinate.x,
+                                       player->level_coordinate.y,
+                                       'd') == 0 ) {
                 player->position += glm::vec3(1.0f * tile_size.x, 0.0f, 0.0f);
                 player->level_coordinate.x += 1;
             }
@@ -315,7 +317,8 @@ int main(int argc, char *argv[])
 
         if ( controller_manager->get_keydown(SDLK_w) ) {
             if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y-1) == 0 ) {
+                                       player->level_coordinate.y,
+                                       'w') == 0 ) {
                 player->position += glm::vec3(0.0f, 0.0f, -1 * tile_size.z);
                 player->level_coordinate.y -= 1;
             }
@@ -323,7 +326,8 @@ int main(int argc, char *argv[])
 
         if ( controller_manager->get_keydown(SDLK_s) ) {
             if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y+1) == 0 ) {
+                                       player->level_coordinate.y,
+                                       's') == 0 ) {
                 player->position += glm::vec3(0.0f, 0.0f, 1 * tile_size.z);
                 player->level_coordinate.y += 1;
             }

@@ -155,25 +155,68 @@ void level_t::create_wall( int x, int y, char wall ) {
 
 
 // Query a coordinate on the map to check for events at that location
-int level_t::query_location( int location_x, int location_y ) {
+int level_t::query_location( int location_x, int location_y, char move ) {
 	int level_event = 0;
-	int index = grid_width*location_y + location_x;
+	int index;
+	int attempt_index;
+	int attempt_x = location_x;
+	int attempt_y = location_y;
 
+	index = grid_width*location_y + location_x;
+	
+	switch ( move ) {
+		case 'w':
+			if ( grid[index].wall_s ) {
+				level_event = -1;
+			} 
 
-	std::cout << "Trying: " << location_x << " " << location_y << std::endl;
-	if ( location_x >= grid_width || location_x < 0 ) {
-		level_event = -1;
-		std::cout << "invalid location x" << std::endl;
-	}
-	else if ( location_y >= grid_height || location_y < 0) {
-		level_event = -1;
-		std::cout << "invalid location y" << std::endl;
-	}
-	else {
-		// TODO(JP): check for other things
-		level_event = grid[index].type;
+			attempt_y -= 1;
+			break;
+		case 'a':
+			if ( grid[index].wall_a ) {
+				level_event = -1;
+			} 
+
+			attempt_x -= 1;
+			break;
+		case 's':
+			if ( grid[index].wall_w ) {
+				level_event = -1;
+			} 
+
+			attempt_y += 1;
+			break;
+		case 'd':
+			if ( grid[index].wall_d ) {
+				level_event = -1;
+			} 
+
+			attempt_x += 1;
+			break;
+		default:
+			break;
 	}
 
+	attempt_index = grid_width*attempt_y + attempt_x;
+
+	std::cout << "Trying: " << attempt_x << " " << attempt_y << std::endl;
+
+	if ( 0 == level_event ) {
+		if ( attempt_x >= grid_width || attempt_x < 0 ) {
+			level_event = -1;
+			std::cout << "invalid location x" << std::endl;
+		}
+		else if ( attempt_y >= grid_height || attempt_y < 0) {
+			level_event = -1;
+			std::cout << "invalid location y" << std::endl;
+		}
+		else {
+			// TODO(JP): check for other things
+			level_event = grid[attempt_index].type;
+		}
+	}
+
+	std::cout << "Level event: " << level_event << std::endl;
 	return level_event;
 }
 

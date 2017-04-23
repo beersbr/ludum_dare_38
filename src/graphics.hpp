@@ -104,7 +104,15 @@ GLuint create_shader(GLenum type, char *shader_source);
 
 void create_model(model_t *model, mesh_t mesh, shader_t *shader, texture_t *texture);
 
-void create_texture(texture_t *texture, char const * image_path); 
+void create_texture(texture_t *texture, char const * image_path);
+
+void create_texture_raw(texture_t *texture,
+                        unsigned long width,
+                        unsigned long height,
+                        GLvoid *bytes,
+                        GLenum ex_internal_format = GL_RGBA,
+                        GLenum ex_format          = GL_BGRA,
+                        GLenum ex_type            = GL_UNSIGNED_BYTE);
 
 void use_texture(texture_t *texture, GLint unit);
 

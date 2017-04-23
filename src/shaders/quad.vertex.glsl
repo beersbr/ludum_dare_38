@@ -14,10 +14,8 @@ layout(location = 3) in vec2 uv;
 
 out vec3 fg_color;
 out vec2 fg_uv;
-out int fg_index;
 
 void main(void) {
-	fg_index = gl_VertexID;
 	vec3 offset_normal = vec3(model * vec4(normal, 1.0));
 	vec3 light_offset  = normalize(light1_position - vec3(model * vec4(position, 1.0)));
 	float light        = dot(normal, light_offset);

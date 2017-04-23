@@ -70,6 +70,9 @@ int main(int argc, char *argv[])
     texture_t player_texture = {};
     create_texture(&player_texture, "images/player.png");
 
+    texture_t wall2_texture = {};
+    create_texture(&wall2_texture, "images/wall2.png");
+
     // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
     // here but that is wher eit is right now.
     vertex_definition_t mesh_data[] = {
@@ -81,13 +84,13 @@ int main(int argc, char *argv[])
         { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
         { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 0.0f) },
 
-        // top
-        { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(1.0f, 0.0f) },
+        // right
+        { glm::vec3( 0.5f,  0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 0.0f) },
 
         // back
         { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(0.0f, 1.0f) },
@@ -97,14 +100,6 @@ int main(int argc, char *argv[])
         { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(0.0f, 0.0f) },
         { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(1.0f, 0.0f) },
 
-        // bottom
-        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 0.0f) },
-
         // left
         { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 1.0f) },
         { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 0.0f) },
@@ -113,13 +108,21 @@ int main(int argc, char *argv[])
         { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 0.0f) },
         { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_X, WHITE, glm::vec2(1.0f, 0.0f) },
 
-        // right
-        { glm::vec3( 0.5f,  0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 0.0f) },
+        // top
+        { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(1.0f, 0.0f) },
+
+        // bottom
+        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 0.0f) },
     };
 
     mesh_t cube_mesh = {};
@@ -280,6 +283,7 @@ int main(int argc, char *argv[])
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
     glEnable( GL_BLEND );
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     static bool running = true;
     static SDL_Event event = {};

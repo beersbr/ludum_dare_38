@@ -214,12 +214,32 @@ void create_model(model_t *model, mesh_t mesh, shader_t *shader, texture_t *text
 
 void create_texture(texture_t *texture, char const * image_path) 
 {
-    assert(texture);
+
+    SDL_Surface *tmp_sdl_surface = IMG_Load(image_path);    
+    create_texture_raw(texture,
+                       tmp_sdl_surface->w,
+                       tmp_sdl_surface->h,
+                       tmp_sdl_surface->pixels);
+
+}
+
+
+void create_texture_raw(texture_t *texture,
+                        unsigned long width,
+                        unsigned long height,
+                        GLvoid *data,
+                        GLenum ex_internal_format,
+                        GLenum ex_format,
+                        GLenum ex_type )
+{
+    assert(texture); 
 
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &texture->id);
     assert(texture->id);
 
+    texture->width  = width;
+    texture->height = height;
     glBindTexture(GL_TEXTURE_2D, texture->id);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -227,23 +247,18 @@ void create_texture(texture_t *texture, char const * image_path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
-    SDL_Surface *tmp_sdl_surface = IMG_Load(image_path);
-    texture->width = tmp_sdl_surface->w;
-    texture->height = tmp_sdl_surface->h;
-
     // NOTE(Brett):assume bytes are in the corect order for now
     glTexImage2D(GL_TEXTURE_2D,
                  0,
-                 GL_RGBA,
+                 ex_internal_format,
                  texture->width,
                  texture->height,
                  0,
-                 GL_BGRA,
-                 GL_UNSIGNED_BYTE,
-                 tmp_sdl_surface->pixels);
+                 ex_format,
+                 ex_type,
+                 data);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-
 }
 
 

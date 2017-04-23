@@ -275,6 +275,7 @@ int main(int argc, char *argv[])
     enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
     enemy->is_enemy         = true;
     enemy->enemy_can_move   = true;
+    enemy->enemy_health 	= 10;
 
 
 

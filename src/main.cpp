@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
                                                      glm::vec3(x_offset, y_offset, z_offset),
                                                      &model);
 
-        if ( tile.wall_w ) { 
+        if ( tile.wall_s ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset+25.f-(5.0/2.f)),
                                                        &model);
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
         }
 
-        if ( tile.wall_s ) { 
+        if ( tile.wall_w ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset-25.f+(5.0/2.f)),
                                                        &model);

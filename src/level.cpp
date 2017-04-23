@@ -91,10 +91,10 @@ void level_t::create_level( int width, int height ) {
 		}
 
 		if( 0 == grid[i].y ) {
-			grid[i].wall_s = true;
+			grid[i].wall_w = true;
 		}
 		else if( height == grid[i].y+1 ) {
-			grid[i].wall_w = true;
+			grid[i].wall_s = true;
 		}	
 	}
 
@@ -113,8 +113,8 @@ void level_t::create_wall( int x, int y, char wall ) {
 
 	switch( wall ) {
 		case 'w':
-			if( grid_height > y+1 ) {
-				adjacent_index = grid_width*(y+1) + x;
+			if( 0 <= y-1 ) {
+				adjacent_index = grid_width*(y-1) + x;
 				grid[adjacent_index].wall_s = true;
 			}
 
@@ -122,8 +122,8 @@ void level_t::create_wall( int x, int y, char wall ) {
 			std::cout << "adding w" << std::endl;
 			break;
 		case 's':
-			if( 0 <= y-1 ) {
-				adjacent_index = grid_width*(y-1) + x;
+			if( grid_height > y+1 ) {
+				adjacent_index = grid_width*(y+1) + x;
 				grid[adjacent_index].wall_w = true;
 			}
 
@@ -166,7 +166,7 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 	
 	switch ( move ) {
 		case 'w':
-			if ( grid[index].wall_s ) {
+			if ( grid[index].wall_w ) {
 				level_event = -1;
 			} 
 
@@ -180,7 +180,7 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 			attempt_x -= 1;
 			break;
 		case 's':
-			if ( grid[index].wall_w ) {
+			if ( grid[index].wall_s ) {
 				level_event = -1;
 			} 
 

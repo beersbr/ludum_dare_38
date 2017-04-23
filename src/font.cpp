@@ -126,12 +126,12 @@ void render_text(std::string text,
         // std::cout << "Working on char: " << *c << " " << xpos << ", " << ypos << ", " << w << ", " << h << std::endl;
 
         font_vertex_description_t vertices[] = {
-            { glm::vec3( xpos,     ypos + h, 0.0f ), glm::vec2( 0.0f, 1.0f ) },
-            { glm::vec3( xpos,     ypos,     0.0f ), glm::vec2( 0.0f, 0.0f ) },
-            { glm::vec3( xpos + w, ypos + h, 0.0f ), glm::vec2( 1.0f, 1.0f ) },
-            { glm::vec3( xpos + w, ypos + h, 0.0f ), glm::vec2( 1.0f, 1.0f ) },
-            { glm::vec3( xpos,     ypos,     0.0f ), glm::vec2( 0.0f, 0.0f ) },
-            { glm::vec3( xpos + w, ypos,     0.0f ), glm::vec2( 1.0f, 0.0f ) },
+            { glm::vec3( xpos,     ypos + h, 0.0f ), glm::vec2( 0.0f, 0.0f ) },
+            { glm::vec3( xpos,     ypos,     0.0f ), glm::vec2( 0.0f, 1.0f ) },
+            { glm::vec3( xpos + w, ypos + h, 0.0f ), glm::vec2( 1.0f, 0.0f ) },
+            { glm::vec3( xpos + w, ypos + h, 0.0f ), glm::vec2( 1.0f, 0.0f ) },
+            { glm::vec3( xpos,     ypos,     0.0f ), glm::vec2( 0.0f, 1.0f ) },
+            { glm::vec3( xpos + w, ypos,     0.0f ), glm::vec2( 1.0f, 1.0f ) },
         };
 
         use_texture(&g.texture, 0);

@@ -94,6 +94,11 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
 }
 
 
+void return_scene_entity(scene_t *scene, entity_t *entity ) {
+
+}
+
+
 void create_animation(animation_t *animation,
                       unsigned long start,
                       unsigned long duration,

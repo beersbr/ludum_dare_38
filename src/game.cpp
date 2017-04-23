@@ -282,7 +282,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
             continue;
         }
 
-        if ( 0 > enemy->enemy_health ) {
+        if ( 0 >= enemy->enemy_health ) {
             return ENEMY_DEATH_ANIMATION;
         }
 
@@ -360,7 +360,22 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 }
 
 STATE_FUNCTION_ID enemy_death_animation( scene_t *scene, unsigned int ticks ) { 
+    entity_t *enemy;
+    std::list<entity_t *>::const_iterator enemy_iterator;
 
+    std::cout << "Enemy action" << std::endl;
+
+    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+        enemy = *enemy_iterator;
+
+        if( !(enemy->is_enemy) ) {
+            continue;
+        }
+
+        if( 0 >= enemy->enemy_health ) {
+            scene->active_entities.remove(enemy);
+        }
+    }
 
     return PLAYER_ACTION;
 }

@@ -121,6 +121,7 @@ void create_scene(scene_t *scene,
 void draw_scene(scene_t *scene);
 
 entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *model);
+void return_scene_entity(scene_t *scene, entity_t *entity);
 
 void draw_entity(entity_t *entity);
 

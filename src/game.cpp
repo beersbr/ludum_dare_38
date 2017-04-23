@@ -4,6 +4,7 @@
 static state_update_function STATE_FUNCTIONS[] = {
     player_action,
     player_attack_animation,
+    player_attack_complete,
     player_move_animation,
     level_change_check,
     level_transition,
@@ -46,6 +47,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x - 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(-ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
                     return PLAYER_ATTACK_ANIMATION;
                 }
                 else {
@@ -76,6 +83,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x + 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
                     return PLAYER_ATTACK_ANIMATION;
                 }
                 else {
@@ -105,6 +118,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y - 1 ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
                     return PLAYER_ATTACK_ANIMATION;
                 }
                 else {
@@ -134,6 +153,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y + 1 ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
                     return PLAYER_ATTACK_ANIMATION;
                 }
                 else {
@@ -153,10 +178,41 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
  
 STATE_FUNCTION_ID player_attack_animation( scene_t *scene, unsigned int ticks ) {
-    std::cout << "Player attack" << std::endl;
-    return ENEMY_ACTION;
+    entity_t *player = scene->player;
+    
+    if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
+        player->animation_end_position = player->animation_start_position;
+        player->animation_start_position = player->position;
+        create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+        return PLAYER_ATTACK_COMPLETE;
+    }
+    else {
+        float value = eval_animation(&player->animation, ticks);
+
+        glm::vec3 delta = (player->animation_end_position - player->animation_start_position);
+        player->position = player->animation_start_position + (delta * value);
+    }
+
+    return PLAYER_ATTACK_ANIMATION;
 }
 
+
+STATE_FUNCTION_ID player_attack_complete( scene_t *scene, unsigned int ticks ) {
+    entity_t *player = scene->player;
+
+    if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
+        return LEVEL_CHANGE_CHECK;
+    }
+    else {
+        float value = eval_animation(&player->animation, ticks);
+
+        glm::vec3 delta = (player->animation_end_position - player->animation_start_position);
+        player->position = player->animation_start_position + (delta * value);
+    }
+
+    return PLAYER_ATTACK_COMPLETE;
+}
 
 STATE_FUNCTION_ID player_move_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *player = scene->player;

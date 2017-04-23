@@ -9,9 +9,12 @@
 
 #include <map>
 
+#define ATTACK_MOVE_DISTANCE 	0.5f
+
 enum STATE_FUNCTION_ID {
     PLAYER_ACTION,
     PLAYER_ATTACK_ANIMATION,
+    PLAYER_ATTACK_COMPLETE,
     PLAYER_MOVE_ANIMATION,
     LEVEL_CHANGE_CHECK,
     LEVEL_TRANSITION,
@@ -29,6 +32,7 @@ typedef struct _game_state_t {
 
 STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID player_attack_animation(scene_t *scene, unsigned int ticks);
+STATE_FUNCTION_ID player_attack_complete(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID level_change_check(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID level_transition(scene_t *scene, unsigned int ticks);

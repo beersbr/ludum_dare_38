@@ -48,6 +48,7 @@ typedef struct _entity_t {
 
     // Enemy stuff
     bool is_enemy;
+    bool enemy_can_move;
     int enemy_health;
     int enemy_stat_damage;
 

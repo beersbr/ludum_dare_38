@@ -9,6 +9,7 @@ static state_update_function STATE_FUNCTIONS[] = {
     level_change_check,
     level_transition,
     enemy_action,
+    enemy_death_animation,
     enemy_attack_animation,
     enemy_move_animation
 };
@@ -21,6 +22,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 {
     entity_t *player = scene->player;
     entity_t *enemy;
+    std::list<entity_t *>::const_iterator enemy_iterator;
 
     if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
         glm::vec2 delta        = controller_manager->cursor - controller_manager->last_cursor;
@@ -38,12 +40,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    'a') != TILE_INVALID ) {
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
-                if ( !(scene->entities_pool[i].is_enemy) ) {
+            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+                enemy = *enemy_iterator;
+
+                if( !(enemy->is_enemy) ) {
                     continue;
                 }
-
-                enemy = &scene->entities_pool[i];
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x - 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
@@ -74,12 +76,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
-                if ( !(scene->entities_pool[i].is_enemy) ) {
+            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+                enemy = *enemy_iterator;
+
+                if( !(enemy->is_enemy) ) {
                     continue;
                 }
-
-                enemy = &scene->entities_pool[i];
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x + 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
@@ -109,12 +111,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    'w') != TILE_INVALID ) {
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
-                if ( !(scene->entities_pool[i].is_enemy) ) {
+            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+                enemy = *enemy_iterator;
+
+                if( !(enemy->is_enemy) ) {
                     continue;
                 }
-
-                enemy = &scene->entities_pool[i];
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y - 1 ) {
@@ -144,12 +146,12 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    's') != TILE_INVALID ) {
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
-                if ( !(scene->entities_pool[i].is_enemy) ) {
+            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+                enemy = *enemy_iterator;
+
+                if( !(enemy->is_enemy) ) {
                     continue;
                 }
-
-                enemy = &scene->entities_pool[i];
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y + 1 ) {
@@ -265,6 +267,7 @@ STATE_FUNCTION_ID level_transition( scene_t *scene, unsigned int ticks ) {
 STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;
     entity_t *player = scene->player;
+    std::list<entity_t *>::const_iterator enemy_iterator;
     int delta_x;
     int delta_y;
     int a_delta_x;
@@ -272,13 +275,16 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
     std::cout << "Enemy action" << std::endl;
 
-    for ( int i=0; i<scene->entities_pool.size(); i++ ) {
+    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+        enemy = *enemy_iterator;
 
-        if( !(scene->entities_pool[i].is_enemy) ) {
+        if( !(enemy->is_enemy) ) {
             continue;
         }
 
-        enemy = &scene->entities_pool[i];
+        if ( 0 > enemy->enemy_health ) {
+            return ENEMY_DEATH_ANIMATION;
+        }
 
         delta_x = player->level_coordinate.x - enemy->level_coordinate.x;
         delta_y = player->level_coordinate.y - enemy->level_coordinate.y;
@@ -353,15 +359,22 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
     return PLAYER_ACTION;
 }
 
+STATE_FUNCTION_ID enemy_death_animation( scene_t *scene, unsigned int ticks ) { 
+
+
+    return PLAYER_ACTION;
+}
+
 STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;
+    std::list<entity_t *>::const_iterator enemy_iterator;
 
-    for(int i=0; i<scene->entities_pool.size(); i++) {
-        if(!(scene->entities_pool[i].is_enemy)) {
+    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+        enemy = *enemy_iterator;
+
+        if( !(enemy->is_enemy) ) {
             continue;
         }
-
-        enemy = &scene->entities_pool[i];
 
         std::cout << "Enemy attack" << std::endl;
         return PLAYER_ACTION;
@@ -372,24 +385,25 @@ STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {
 
 STATE_FUNCTION_ID enemy_move_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;
+    std::list<entity_t *>::const_iterator enemy_iterator;
 
-    for(int i=0; i<scene->entities_pool.size(); i++) {
-        if(!(scene->entities_pool[i].is_enemy)) {
+    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+        enemy = *enemy_iterator;
+
+        if( !(enemy->is_enemy) ) {
             continue;
         }
 
-        enemy = &scene->entities_pool[i];
-    }
+        if ( enemy->animation.is_done || ticks - enemy->animation.start_tick > enemy->animation.duration ) {
+            enemy->position = enemy->animation_end_position;
+            return PLAYER_ACTION;
+        }
+        else {
+            float value = eval_animation(&enemy->animation, ticks);
 
-    if ( enemy->animation.is_done || ticks - enemy->animation.start_tick > enemy->animation.duration ) {
-        enemy->position = enemy->animation_end_position;
-        return PLAYER_ACTION;
-    }
-    else {
-        float value = eval_animation(&enemy->animation, ticks);
-
-        glm::vec3 delta = (enemy->animation_end_position - enemy->animation_start_position);
-        enemy->position = enemy->animation_start_position + (delta * value);
+            glm::vec3 delta = (enemy->animation_end_position - enemy->animation_start_position);
+            enemy->position = enemy->animation_start_position + (delta * value);
+        }
     }
 
     return ENEMY_MOVE_ANIMATION;

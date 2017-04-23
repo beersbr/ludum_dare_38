@@ -141,7 +141,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                     enemy->level_coordinate.x -= 1;
 
                     enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+                    enemy->animation_end_position   = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
                     create_animation(&enemy->animation, ticks, 300, ease_out_circ);
                     return ENEMY_MOVE_ANIMATION;
                 }
@@ -149,7 +149,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                     enemy->level_coordinate.x += 1;
 
                     enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+                    enemy->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
                     create_animation(&enemy->animation, ticks, 300, ease_out_circ);
                     return ENEMY_MOVE_ANIMATION;
                 }
@@ -167,7 +167,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                     enemy->level_coordinate.y += 1;
 
                     enemy->animation_start_position = enemy->position;
-                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+                    enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);
                     create_animation(&enemy->animation, ticks, 300, ease_out_circ);
                     return ENEMY_MOVE_ANIMATION;
                 }

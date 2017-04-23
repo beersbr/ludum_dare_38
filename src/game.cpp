@@ -11,6 +11,7 @@ static state_update_function STATE_FUNCTIONS[] = {
     enemy_action,
     enemy_death_animation,
     enemy_attack_animation,
+    enemy_attack_complete,
     enemy_move_animation
 };
 
@@ -205,7 +206,7 @@ STATE_FUNCTION_ID player_attack_complete( scene_t *scene, unsigned int ticks ) {
     entity_t *player = scene->player;
 
     if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
-        return LEVEL_CHANGE_CHECK;
+        return ENEMY_ACTION;
     }
     else {
         float value = eval_animation(&player->animation, ticks);
@@ -274,8 +275,6 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
     int a_delta_x;
     int a_delta_y;
 
-    std::cout << "Enemy action" << std::endl;
-
     for ( enemy_iterator = scene->active_entities.begin(); 
          enemy_iterator != scene->active_entities.end(); 
          ++enemy_iterator ) 
@@ -295,13 +294,17 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
         a_delta_x = std::abs(delta_x);
         a_delta_y = std::abs(delta_y);
 
+        std::cout << "Delta x: " << delta_x << " Delta y: " << delta_y << std::endl;
+
         if ( a_delta_x <=1 && a_delta_y <= 1 && a_delta_x != a_delta_y ) {
-            // Attack, don't bother moving
+            enemy->animation_start_position = enemy->position;
+            enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
+            create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
             return ENEMY_ATTACK_ANIMATION;
         }
 
         if ( enemy->enemy_can_move ) {
-            std::cout << "Delta x: " << delta_x << " Delta y: " << delta_y << std::endl;
 
             if( a_delta_x > a_delta_y ) {
 
@@ -313,7 +316,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
                         enemy->animation_start_position = enemy->position;
                         enemy->animation_end_position   = enemy->position + glm::vec3(+1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
                         return ENEMY_MOVE_ANIMATION;
                     }
                 }
@@ -325,7 +328,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
                         enemy->animation_start_position = enemy->position;
                         enemy->animation_end_position   = enemy->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
                         return ENEMY_MOVE_ANIMATION;
                     }
                 }
@@ -339,7 +342,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
                         enemy->animation_start_position = enemy->position;
                         enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
-                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
                         return ENEMY_MOVE_ANIMATION;
                     }
                 }
@@ -351,13 +354,12 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
                         enemy->animation_start_position = enemy->position;
                         enemy->animation_end_position = enemy->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);
-                        create_animation(&enemy->animation, ticks, 300, ease_out_circ);
+                        create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
                         return ENEMY_MOVE_ANIMATION;
                     }
                 }
             }
         }
-        // TODO(JP): attack if player in neighboring tile
     }
 
     return PLAYER_ACTION;
@@ -398,6 +400,8 @@ STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;
     std::list<entity_t *>::const_iterator enemy_iterator;
 
+    std::cout << "Enemy attack" << std::endl;
+
     for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
         enemy = *enemy_iterator;
 
@@ -405,12 +409,50 @@ STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {
             continue;
         }
 
-        std::cout << "Enemy attack" << std::endl;
-        return PLAYER_ACTION;
+        if ( enemy->animation.is_done || ticks - enemy->animation.start_tick > enemy->animation.duration ) {
+            enemy->animation_end_position = enemy->animation_start_position;
+            enemy->animation_start_position = enemy->position;
+            create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+            return ENEMY_ATTACK_COMPLETE;
+        }
+        else {
+            float value = eval_animation(&enemy->animation, ticks);
+
+            glm::vec3 delta = (enemy->animation_end_position - enemy->animation_start_position);
+            enemy->position = enemy->animation_start_position + (delta * value);
+        }
     }
 
     return ENEMY_ATTACK_ANIMATION;
 }
+
+
+STATE_FUNCTION_ID enemy_attack_complete( scene_t *scene, unsigned int ticks ) {
+    entity_t *enemy;
+    std::list<entity_t *>::const_iterator enemy_iterator;
+
+    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+        enemy = *enemy_iterator;
+
+        if( !(enemy->is_enemy) ) {
+            continue;
+        }
+
+        if ( enemy->animation.is_done || ticks - enemy->animation.start_tick > enemy->animation.duration ) {
+            return PLAYER_ACTION;
+        }
+        else {
+            float value = eval_animation(&enemy->animation, ticks);
+
+            glm::vec3 delta = (enemy->animation_end_position - enemy->animation_start_position);
+            enemy->position = enemy->animation_start_position + (delta * value);
+        }
+    }
+
+    return ENEMY_ATTACK_COMPLETE;
+}
+
 
 STATE_FUNCTION_ID enemy_move_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *enemy;

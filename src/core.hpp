@@ -15,6 +15,19 @@
 #define TILE_SIZE glm::vec3(50.f, 20.f, 50.f)
 #define CAMERA_OFFSET glm::vec3(25.0f, 250.f, 125.f)
 
+
+typedef float (*animation_function)(unsigned long start_tick,
+                                    unsigned long current_tick,
+                                    unsigned long duration_ticks);
+
+typedef struct _animtion_t {
+    bool is_done;
+    unsigned long start_tick;
+    unsigned long duration;
+    animation_function function;
+} animation_t;
+
+
 typedef struct _entity_t {
     unsigned int id;
 
@@ -23,6 +36,12 @@ typedef struct _entity_t {
     glm::vec3 scale;
 
     glm::vec2 level_coordinate;
+
+    glm::vec3 animation_start_position;
+    glm::vec3 animation_end_position;
+
+    bool is_animating;
+    animation_t animation;
 
     bool is_static;
 
@@ -82,6 +101,17 @@ typedef struct _scene_t {
 
 } scene_t;
 
+
+void create_animation(animation_t *animation,
+                      unsigned long start,
+                      unsigned long duration,
+                      animation_function fn);
+
+float eval_animation(unsigned long current_tick);
+
+float linear(unsigned long start_tick,
+             unsigned long current_tick,
+             unsigned long duration_ticks);
 
 void create_scene(scene_t *scene,
                   glm::mat4 projection_matrix,

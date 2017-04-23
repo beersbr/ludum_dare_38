@@ -10,10 +10,13 @@
 
 typedef void (*state_update_function)(scene_t *scene, unsigned int ticks);
 
+
+
 typedef struct _game_state_t {
     state_update_function update;
 } game_state_t;
 
-void update_player(scene_t *scene, unsigned int ticks);
+void player_action(scene_t *scene, unsigned int ticks);
+void player_move_animation(scene_t *scene, unsigned int ticks);
 
 #endif

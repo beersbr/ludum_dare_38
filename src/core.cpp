@@ -88,3 +88,41 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
 
     return entity;
 }
+
+
+void create_animation(animation_t *animation,
+                      unsigned long start,
+                      unsigned long duration,
+                      animation_function fn)
+{
+    assert(animation);
+
+    animation->start_tick = start;
+    animation->duration = duration;
+    animation->is_done = false;
+    animation->function = fn;
+}
+
+
+float eval_animation(animation_t *animation, unsigned long current_tick)
+{
+    float result = animation->function(animation->start_tick,
+                                       current_tick,
+                                       animation->duration);
+
+    if ( result >= 1.0f ) {
+        result = 1.0f;
+        animation->is_done = true;
+    }
+
+    return result;
+}
+
+
+float linear(unsigned long start_tick,
+             unsigned long current_tick,
+             unsigned long duration_ticks)
+{
+
+    return (current_tick - start_tick / duration_ticks);
+}

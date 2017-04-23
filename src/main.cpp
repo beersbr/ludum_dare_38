@@ -1,4 +1,4 @@
-
+// 
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2_Image/SDL_image.h>
@@ -237,7 +237,10 @@ int main(int argc, char *argv[])
     scene.player = player;
 
     game_state_t game_state = {};
-    game_state.update = update_player;
+
+    int state_loop = 0;
+
+    game_state.update = player_action;
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -289,7 +292,12 @@ int main(int argc, char *argv[])
         }
         float ticks = SDL_GetTicks()/500.f;
 
-        game_state.update(&scene, ticks);
+        // plyaer action
+        // player animation
+        // turn change 
+
+        assert(game_state.update);
+        game_state.update = (state_update_function)game_state.update(&scene, ticks);
 
         float factor = ((float)sin(ticks)+1.f);
         float color_f = 0.5f;

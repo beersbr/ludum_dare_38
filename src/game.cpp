@@ -1,6 +1,6 @@
 #include "game.hpp"
 
-void update_player(scene_t *scene, unsigned int ticks)
+state_update_function player_action(scene_t *scene, unsigned int ticks)
 {
     entity_t *player = scene->player;
 
@@ -18,8 +18,13 @@ void update_player(scene_t *scene, unsigned int ticks)
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'a') == 0 ) {
-            player->position += glm::vec3(-1 * TILE_SIZE.x, 0.0f, 0.0f);
+ 
             player->level_coordinate.x -= 1;
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(-1 * TILE_SIZE.x, 0.0f, 0.0f);
+            create_animation(&player->animation, ticks, 1000, linear);
+            return player_move_animation;
         }
 
     }
@@ -28,18 +33,30 @@ void update_player(scene_t *scene, unsigned int ticks)
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'd') == 0 ) {
-            player->position += glm::vec3(1.0f * TILE_SIZE.x, 0.0f, 0.0f);
+
             player->level_coordinate.x += 1;
+            
+            player->animation_start_position = player->position;
+            player->animation_end_position   = player->position + glm::vec3(1.0f * TILE_SIZE.x, 0.0f, 0.0f);
+            create_animation(&player->animation, ticks, 1000, linear);
+            return player_move_animation;
         }
+
     }
 
     if ( controller_manager->get_keydown(SDLK_w) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'w') == 0 ) {
-            player->position += glm::vec3(0.0f, 0.0f, -1 * TILE_SIZE.z);
+
             player->level_coordinate.y -= 1;
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1 * TILE_SIZE.z);
+            create_animation(&player->animation, ticks, 1000, linear);
+            return player_move_animation;
         }
+
     }
 
     if ( controller_manager->get_keydown(SDLK_s) ) {
@@ -47,10 +64,27 @@ void update_player(scene_t *scene, unsigned int ticks)
                                    player->level_coordinate.y,
                                    's') == 0 ) {
 
-            player->position += glm::vec3(0.0f, 0.0f, 1 * TILE_SIZE.z);
             player->level_coordinate.y += 1;
-        }
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1 * TILE_SIZE.z);    
+            create_animation(&player->animation, ticks, 1000, linear);
+            return player_move_animation;
+        }   
+
     }
 
+    return player_action;
+}
 
+
+state_update_function player_move_animation(scene_t *scene, unsigned int ticks)
+{
+    entity_t *player = scene->player;
+
+    if ( player.animation.is_done ) {
+        return player_action;
+    }
+
+    return player_move_animation;
 }

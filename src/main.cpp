@@ -351,19 +351,11 @@ int main(int argc, char *argv[])
                                             scene.camera_lookat,
                                             glm::vec3(0.0f, 1.0f, 0.0f));
 
-        render_text("HELLO WORLD",
-                    glm::vec3(0.f, 150.0f, 0.0f),
+        render_text("A small room v0.1",
+                    glm::vec3(-390.f, -290.0f, -1.0f),
                     WHITE,
-                    1.f,
-                    projection_matrix,
-                    view_matrix);
-
-        render_text("HELLO WORLD 2",
-                    glm::vec3(-380.f, -300.0f, -1.0f),
-                    WHITE,
-                    1.f,
+                    0.5f,
                     projection_matrix);
-
         
         SDL_GL_SwapWindow(main_window);
     }

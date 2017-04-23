@@ -24,7 +24,7 @@ void setup_text_renderer(shader_t *shader, char const * font_path )
         exit(1);
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 24);
+    FT_Set_Pixel_Sizes(face, 0, 48);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     for ( GLubyte character = 0; character < 128; character++ ) {

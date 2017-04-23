@@ -1,12 +1,13 @@
 #ifndef _ROOM_HPP
 #define _ROOM_HPP
 
-#define LEVEL_INVALID 	-1
+#define TILE_INVALID 	-1
 
 // Any room set to 0 is nothing special
 typedef enum TILE_TYPE {
-	LEVEL_ENTRANCE = 1,
-	LEVEL_EXIT
+	TILE_ENTRANCE = 1,
+	TILE_EXIT,
+	TILE_ENEMY
 	// TODO(JP): add more room types?
 } TILE_TYPE_T;
 

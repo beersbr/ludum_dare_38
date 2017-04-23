@@ -230,7 +230,8 @@ void create_texture_raw(texture_t *texture,
                         GLvoid *data,
                         GLenum ex_internal_format,
                         GLenum ex_format,
-                        GLenum ex_type )
+                        GLenum ex_type,
+                        GLenum ex_wrap )
 {
     assert(texture); 
 

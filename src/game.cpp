@@ -57,15 +57,13 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                     return PLAYER_ATTACK_ANIMATION;
                 }
-                else {
-                    player->level_coordinate.x -= 1;
-
-                    player->animation_start_position = player->position;
-                    player->animation_end_position = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-                    return PLAYER_MOVE_ANIMATION;
-                }
             }
+            player->level_coordinate.x -= 1;
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+            return PLAYER_MOVE_ANIMATION;
         }
     }
 
@@ -76,7 +74,10 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+            for ( enemy_iterator = scene->active_entities.begin(); 
+                 enemy_iterator != scene->active_entities.end(); 
+                 ++enemy_iterator ) 
+            {
                 enemy = *enemy_iterator;
 
                 if( !(enemy->is_enemy) ) {
@@ -93,15 +94,13 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                     return PLAYER_ATTACK_ANIMATION;
                 }
-                else {
-                    player->level_coordinate.x += 1;
-                    
-                    player->animation_start_position = player->position;
-                    player->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
-                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-                    return PLAYER_MOVE_ANIMATION;
-                }
             }
+            player->level_coordinate.x += 1;
+            
+            player->animation_start_position = player->position;
+            player->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+            return PLAYER_MOVE_ANIMATION;
         }
     }
 
@@ -111,7 +110,10 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    'w') != TILE_INVALID ) {
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+            for ( enemy_iterator = scene->active_entities.begin(); 
+                 enemy_iterator != scene->active_entities.end(); 
+                 ++enemy_iterator ) 
+            {
                 enemy = *enemy_iterator;
 
                 if( !(enemy->is_enemy) ) {
@@ -128,15 +130,13 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                     return PLAYER_ATTACK_ANIMATION;
                 }
-                else {
-                    player->level_coordinate.y -= 1;
-
-                    player->animation_start_position = player->position;
-                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
-                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-                    return PLAYER_MOVE_ANIMATION;
-                }
             }
+            player->level_coordinate.y -= 1;
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+            return PLAYER_MOVE_ANIMATION;
         }
     }
 
@@ -146,7 +146,10 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    's') != TILE_INVALID ) {
 
             // NOTE(JP): Check for an enemy in the next tile before moving
-            for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+            for ( enemy_iterator = scene->active_entities.begin(); 
+                 enemy_iterator != scene->active_entities.end(); 
+                 ++enemy_iterator ) 
+            {
                 enemy = *enemy_iterator;
 
                 if( !(enemy->is_enemy) ) {
@@ -163,15 +166,13 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                     return PLAYER_ATTACK_ANIMATION;
                 }
-                else {
-                    player->level_coordinate.y += 1;
-
-                    player->animation_start_position = player->position;
-                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);    
-                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
-                    return PLAYER_MOVE_ANIMATION;
-                }
             }
+            player->level_coordinate.y += 1;
+
+            player->animation_start_position = player->position;
+            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);    
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+            return PLAYER_MOVE_ANIMATION;
         }   
     }
 
@@ -275,7 +276,10 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
     std::cout << "Enemy action" << std::endl;
 
-    for ( enemy_iterator = scene->active_entities.begin(); enemy_iterator != scene->active_entities.end(); ++enemy_iterator ) {
+    for ( enemy_iterator = scene->active_entities.begin(); 
+         enemy_iterator != scene->active_entities.end(); 
+         ++enemy_iterator ) 
+    {
         enemy = *enemy_iterator;
 
         if( !(enemy->is_enemy) ) {

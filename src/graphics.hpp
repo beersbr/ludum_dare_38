@@ -25,7 +25,7 @@
 #define POS_X glm::vec3( 1.f, 0.0f, 0.0f)
 #define NEG_Y glm::vec3(0.f, -1.0f, 0.0f)
 #define POS_Y glm::vec3(0.f,  1.0f, 0.0f)
-#define NEG_Z glm::vec3(0.f, 0.0f, -0.0f)
+#define NEG_Z glm::vec3(0.f, 0.0f, -1.0f)
 #define POS_Z glm::vec3(0.f, 0.0f,  1.0f)
 
 #define SHADER_ATTRIBUTE_POSITION 0

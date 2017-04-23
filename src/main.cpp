@@ -74,20 +74,20 @@ int main(int argc, char *argv[])
     // here but that is wher eit is right now.
     vertex_definition_t mesh_data[] = {
         // front
-        { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 0.0f) },
 
         // back
-        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), POS_Z, BLACK, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 0.0f) },
 
         // top
         { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(0.0f, 1.0f) },
@@ -106,20 +106,20 @@ int main(int argc, char *argv[])
         { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(1.0f, 0.0f) },
 
         // left
-        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), NEG_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_X, WHITE, glm::vec2(1.0f, 0.0f) },
 
         // right
-        { glm::vec3( 0.5f,  0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_X, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_X, BLUE, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), POS_X, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), POS_X, WHITE, glm::vec2(1.0f, 0.0f) },
     };
 
     mesh_t cube_mesh = {};
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
                                         (8.0*tile_size.z)/2.f);
 
 
-    glm::vec3 camera_position = camera_lookat + glm::vec3(0.0f, 550.f, 250.f);
+    glm::vec3 camera_position = camera_lookat + glm::vec3(25.0f, 250.f, 125.f);
 
     entity_t *player = request_scene_entity(&scene,
                                             glm::vec3(tile_size.x/2.f,
@@ -291,6 +291,10 @@ int main(int argc, char *argv[])
             glm::vec3 new_eye = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
             scene.camera_position = scene.camera_lookat + new_eye;
         }
+        else { 
+            scene.camera_position = camera_position;
+        }
+
 
         if ( controller_manager->get_keydown(SDLK_a) ) {
             if ( level1.query_location(player->level_coordinate.x-1,
@@ -333,10 +337,22 @@ int main(int argc, char *argv[])
 
         // prepare scene()
 
-        float factor = ((float)sin(ticks)+1.f)/4.f + 0.25f;
-        glClearColor(factor, 0.0f, factor, 1.0f);
+        float factor = ((float)sin(ticks)+1.f);
+        float color_f = 0.5f;
+        glClearColor(color_f, 0.0f, color_f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        scene.light1_position = scene.camera_position;
+
+        glm::vec3 inverse_camera_direction = scene.camera_position - scene.camera_lookat;
+        inverse_camera_direction.y = 0.f;
+        inverse_camera_direction = glm::normalize(inverse_camera_direction);
+        inverse_camera_direction *= 300.f;
+        inverse_camera_direction.y = 300.f;
+
+        scene.light1_position = scene.camera_lookat + inverse_camera_direction;
+
+        // scene.light1_position.y += factor*500.f;
         draw_scene(&scene);
         
         SDL_GL_SwapWindow(main_window);

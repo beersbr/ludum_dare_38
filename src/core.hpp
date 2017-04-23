@@ -63,6 +63,9 @@ typedef struct _scene_t {
 
     glm::mat4 projection_matrix;
 
+    glm::vec3 light1_direction;
+    glm::vec3 light1_position;
+
     glm::vec3 camera_position;
     glm::vec3 camera_lookat;
 

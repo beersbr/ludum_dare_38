@@ -5,6 +5,7 @@ static state_update_function STATE_FUNCTIONS[] = {
     player_action,
     player_attack_animation,
     player_move_animation,
+    level_next,
     enemy_action,
     enemy_attack_animation,
     enemy_move_animation
@@ -31,7 +32,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     if ( controller_manager->get_keydown(SDLK_a) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
-                                   'a') == 0 ) {
+                                   'a') != LEVEL_INVALID ) {
  
             player->level_coordinate.x -= 1;
 
@@ -46,7 +47,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     if ( controller_manager->get_keydown(SDLK_d) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
-                                   'd') == 0 ) {
+                                   'd') != LEVEL_INVALID ) {
 
             player->level_coordinate.x += 1;
             
@@ -61,7 +62,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     if ( controller_manager->get_keydown(SDLK_w) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
-                                   'w') == 0 ) {
+                                   'w') != LEVEL_INVALID ) {
 
             player->level_coordinate.y -= 1;
 
@@ -76,7 +77,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     if ( controller_manager->get_keydown(SDLK_s) ) {
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
-                                   's') == 0 ) {
+                                   's') != LEVEL_INVALID ) {
 
             player->level_coordinate.y += 1;
 
@@ -91,8 +92,8 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     return PLAYER_ACTION;
 }
 
-
-STATE_FUNCTION_ID player_attack_animation(scene_t *scene, unsigned int ticks) {
+ 
+STATE_FUNCTION_ID player_attack_animation( scene_t *scene, unsigned int ticks ) {
     return PLAYER_ATTACK_ANIMATION;
 }
 
@@ -102,7 +103,7 @@ STATE_FUNCTION_ID player_move_animation( scene_t *scene, unsigned int ticks ) {
 
     if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
         player->position = player->animation_end_position;
-        return ENEMY_ACTION;
+        return LEVEL_NEXT;
     }
     else {
         float value = eval_animation(&player->animation, ticks);
@@ -112,6 +113,19 @@ STATE_FUNCTION_ID player_move_animation( scene_t *scene, unsigned int ticks ) {
     }
 
     return PLAYER_MOVE_ANIMATION;
+}
+
+
+STATE_FUNCTION_ID level_next( scene_t *scene, unsigned int ticks ) {
+    entity_t *player = scene->player;
+
+    if ( scene->level->query_location(player->level_coordinate.x,
+                                   player->level_coordinate.y,
+                                   '\0') == LEVEL_EXIT ) {
+        std::cout << "Found exit" << std::endl;
+    }
+
+    return ENEMY_ACTION;
 }
 
 STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {

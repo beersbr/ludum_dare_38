@@ -49,10 +49,10 @@ void level_t::create_level( int width, int height ) {
 	grid.resize( width*height );
 
 	// Create entrance on bottom row of grid
-	grid[rand() % width].type = level_entrance;
+	grid[rand() % width].type = LEVEL_ENTRANCE;
 
 	// Create exit at top row of grid
-	grid[rand() % width + (width*height-width)].type = level_exit;
+	grid[rand() % width + (width*height-width)].type = LEVEL_EXIT;
 
 
 	for( int i=0; i<grid_width*grid_height; i++) {
@@ -167,28 +167,28 @@ int level_t::query_location( int location_x, int location_y, char move ) {
 	switch ( move ) {
 		case 'w':
 			if ( grid[index].wall_w ) {
-				level_event = -1;
+				level_event = LEVEL_INVALID;
 			} 
 
 			attempt_y -= 1;
 			break;
 		case 'a':
 			if ( grid[index].wall_a ) {
-				level_event = -1;
+				level_event = LEVEL_INVALID;
 			} 
 
 			attempt_x -= 1;
 			break;
 		case 's':
 			if ( grid[index].wall_s ) {
-				level_event = -1;
+				level_event = LEVEL_INVALID;
 			} 
 
 			attempt_y += 1;
 			break;
 		case 'd':
 			if ( grid[index].wall_d ) {
-				level_event = -1;
+				level_event = LEVEL_INVALID;
 			} 
 
 			attempt_x += 1;

@@ -3,12 +3,11 @@
 static GLuint FONT_VAO = 0;
 static GLuint FONT_VBO = 0;
 
-static texture_t *FONT_TEXTURE;
 static shader_t *FONT_SHADER;
 
 static std::map<GLchar, glyph_t> glyphs;
 
-void setup_text_renderer(texture_t *texture, shader_t *shader, char * font_path )
+void setup_text_renderer(shader_t *shader, char const * font_path )
 {
     FT_Library ft;
     if ( FT_Init_FreeType(&ft) ) {
@@ -24,6 +23,7 @@ void setup_text_renderer(texture_t *texture, shader_t *shader, char * font_path 
 
     FT_Set_Pixel_Sizes(face, 0, 48);
 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     for ( GLubyte character = 0; character < 128; character++ ) {
 
         if ( FT_Load_Char(face, character, FT_LOAD_RENDER) ) {
@@ -31,8 +31,23 @@ void setup_text_renderer(texture_t *texture, shader_t *shader, char * font_path 
             exit(1);
         }
 
-        
+        glyph_t glyph = {};
+        create_texture_raw(&glyph.texture,
+                           face->glyph->bitmap.width,
+                           face->glyph->bitmap.rows,
+                           face->glyph->bitmap.buffer,
+                           GL_RED,
+                           GL_RED,
+                           GL_UNSIGNED_BYTE);
+
+        glyph.size            = glm::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+        glyph.baseline_offset = glm::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+        glyph.glyph_offset    = face->glyph->advance.x;
+
+
+        glyphs.insert(std::pair<GLchar, glyph_t>(character, glyph));
     }
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 
     glGenVertexArrays(1, &FONT_VAO);

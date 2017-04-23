@@ -20,6 +20,7 @@
 #include "graphics.hpp"
 #include "core.hpp"
 #include "game.hpp"
+#include "font.hpp"
 
 #include "items/item_sword.hpp"
 
@@ -61,6 +62,11 @@ int main(int argc, char *argv[])
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
 
+    shader_t font_shader = {};
+    create_shader_program(&font_shader,
+                          "shaders/font.vertex.glsl",
+                          "shaders/font.fragment.glsl");
+
     texture_t default_texture = {};
     create_texture(&default_texture, "images/tile_simple.png");
 
@@ -72,6 +78,9 @@ int main(int argc, char *argv[])
 
     texture_t wall2_texture = {};
     create_texture(&wall2_texture, "images/wall2.png");
+
+
+    setup_text_renderer(&font_shader, "fonts/Anonymous Pro.ttf");
 
     // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
     // here but that is wher eit is right now.

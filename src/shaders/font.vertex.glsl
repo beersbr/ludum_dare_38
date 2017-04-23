@@ -12,5 +12,5 @@ out vec2 fg_uv;
 void main() 
 {
 	fg_uv = uv;
-	gl_Position = projection * view * model * vec4(font_vertex.xy, 0.0, 1.0);
+	gl_Position = projection * view * model * vec4(position.xyz, 1.0);
 }

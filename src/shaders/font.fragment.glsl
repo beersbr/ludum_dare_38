@@ -5,10 +5,10 @@ uniform vec3 u_color;
 
 in vec2 fg_uv;
 
-out color;
+out vec4 color;
 
 void main() 
 {
-	vec3 alpha = vec4(1.0, 1.0, 1.0, texture(u_iamge, fg_uv).r);
-	color = vec4(color, 1.0) * alpha;
+	vec4 alpha = vec4(1.0, 1.0, 1.0, texture(u_image, fg_uv).r);
+	color = vec4(color.rgb, 1.0) * alpha;
 }

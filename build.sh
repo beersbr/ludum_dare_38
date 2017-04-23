@@ -21,6 +21,9 @@ cp -r $SRC_DIR/shaders/* $BUILD_DIR/shaders/
 mkdir -p $BUILD_DIR/images
 cp -r $SRC_DIR/images/* $BUILD_DIR/images/
 
+mkdir -p $BUILD_DIR/fonts
+cp -r $SRC_DIR/fonts/* $BUILD_DIR/fonts/
+
 
 pushd $SRC_DIR
     clang++ main.cpp graphics.cpp controller_manager.cpp level.cpp util.cpp core.cpp game.cpp font.cpp \

@@ -37,7 +37,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, 300, ease_out_circ);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
             return PLAYER_MOVE_ANIMATION;
         }
 
@@ -52,7 +52,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
             
             player->animation_start_position = player->position;
             player->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, 300, ease_out_circ);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
             return PLAYER_MOVE_ANIMATION;
         }
 
@@ -67,7 +67,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
-            create_animation(&player->animation, ticks, 300, ease_out_circ);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
             return PLAYER_MOVE_ANIMATION;
         }
 
@@ -82,7 +82,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);    
-            create_animation(&player->animation, ticks, 300, ease_out);
+            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
             return PLAYER_MOVE_ANIMATION;
         }   
 

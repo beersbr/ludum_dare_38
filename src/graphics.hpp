@@ -92,7 +92,6 @@ typedef struct _shader_manager_t {
 
 } shader_manager_t;
 
-
 void use_shader(shader_t *shader);
 
 GLint get_uniform_location(shader_t *shader, std::string name);

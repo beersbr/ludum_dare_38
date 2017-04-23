@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
                                    WIDTH, HEIGHT, 
-                                   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+                                   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
 
     SDL_GLContext main_context = SDL_GL_CreateContext(main_window);
 
@@ -253,15 +253,23 @@ int main(int argc, char *argv[])
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);
 
-    enemy->scale = player_size;
-    enemy->level_coordinate =glm::vec2(0.f, 0.f);
-    enemy->is_enemy = true;
-    enemy->enemy_can_move = true;
 
-    scene.camera_lookat = camera_lookat;
+
+    glm::vec2 enemy_coordinates = glm::vec2(4.f, 4.f);
+    glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
+    enemy->scale            = player_size;
+
+    enemy->level_coordinate = enemy_coordinates;
+    enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
+    enemy->is_enemy         = true;
+    enemy->enemy_can_move   = true;
+
+
+
+    scene.camera_lookat   = camera_lookat;
     scene.camera_position = camera_position;
-    scene.level = &level1;
-    scene.player = player;
+    scene.level           = &level1;
+    scene.player          = player;
 
     game_state_t game_state = {};
 

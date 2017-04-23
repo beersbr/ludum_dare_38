@@ -19,6 +19,7 @@
 #include "level.hpp"
 #include "graphics.hpp"
 #include "core.hpp"
+#include "game.hpp"
 
 #include "items/item_sword.hpp"
 
@@ -146,13 +147,11 @@ int main(int argc, char *argv[])
     level1.create_wall( 5, 1, 'd' );
     level1.print_level();
 
-    glm::vec3 tile_size = glm::vec3(50.f, 20.f, 50.f);
-
     for( int offset = 0; offset < level1.grid.size(); ++offset ) {
         tile_t tile = level1.grid[offset];
 
-        float x_offset = tile.x * tile_size.x + tile_size.x/2.f;
-        float z_offset = tile.y * tile_size.z + tile_size.z/2.f;
+        float x_offset = tile.x * TILE_SIZE.x + TILE_SIZE.x/2.f;
+        float z_offset = tile.y * TILE_SIZE.z + TILE_SIZE.z/2.f;
         float y_offset = 0.f;
 
         std::cout << x_offset << " " << z_offset << std::endl;
@@ -211,22 +210,22 @@ int main(int argc, char *argv[])
         }
 
         std::cout << tile_entity->id << std::endl;
-        tile_entity->scale = tile_size;
+        tile_entity->scale = TILE_SIZE;
     }
 
     glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
-    glm::vec3 camera_lookat = glm::vec3((8.0*tile_size.x)/2.f,
+    glm::vec3 camera_lookat = glm::vec3((8.0*TILE_SIZE.x)/2.f,
                                         0.0f,
-                                        (8.0*tile_size.z)/2.f);
+                                        (8.0*TILE_SIZE.z)/2.f);
 
 
-    glm::vec3 camera_position = camera_lookat + glm::vec3(25.0f, 250.f, 125.f);
+    glm::vec3 camera_position = camera_lookat + CAMERA_OFFSET;
 
     entity_t *player = request_scene_entity(&scene,
-                                            glm::vec3(tile_size.x/2.f,
-                                                      tile_size.y+player_size.y/2.f,
-                                                      tile_size.z/2.f),
+                                            glm::vec3(TILE_SIZE.x/2.f,
+                                                      TILE_SIZE.y+player_size.y/2.f,
+                                                      TILE_SIZE.z/2.f),
                                             &model);
 
     player->scale = player_size;
@@ -234,6 +233,11 @@ int main(int argc, char *argv[])
 
     scene.camera_lookat = camera_lookat;
     scene.camera_position = camera_position;
+    scene.level = &level1;
+    scene.player = player;
+
+    game_state_t game_state = {};
+    game_state.update = update_player;
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
@@ -241,16 +245,16 @@ int main(int argc, char *argv[])
     static bool running = true;
     static SDL_Event event = {};
 
-    entity_t enemy;
-    enemy.is_enemy = true;
-    enemy.enemy_health = 100;
+    // entity_t enemy;
+    // enemy.is_enemy = true;
+    // enemy.enemy_health = 100;
 
     // playing with item stuff
-    entity_t item_sword;
-    item_sword.is_item = true;
-    item_sword.item_name = "Basic sword";
-    item_sword.item_description = "Deals damage to enermies";
-    item_sword.after_attack = &sword_deal_damage;
+    // entity_t item_sword;
+    // item_sword.is_item = true;
+    // item_sword.item_name = "Basic sword";
+    // item_sword.item_description = "Deals damage to enermies";
+    // item_sword.after_attack = &sword_deal_damage;
 
     while ( running ) { 
         controller_manager->last_cursor = controller_manager->cursor;
@@ -285,61 +289,7 @@ int main(int argc, char *argv[])
         }
         float ticks = SDL_GetTicks()/500.f;
 
-        if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
-            glm::vec2 delta = controller_manager->cursor - controller_manager->last_cursor;
-            glm::vec3 eye = scene.camera_position - scene.camera_lookat;
-            glm::vec3 new_eye = glm::rotate(eye, (delta.x/-50.f), glm::vec3(0.0f, 1.0f, 0.0f));
-            scene.camera_position = scene.camera_lookat + new_eye;
-        }
-        else { 
-            scene.camera_position = camera_position;
-        }
-
-
-        if ( controller_manager->get_keydown(SDLK_a) ) {
-            if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y,
-                                       'a') == 0 ) {
-                player->position += glm::vec3(-1 * tile_size.x, 0.0f, 0.0f);
-                player->level_coordinate.x -= 1;
-            }
-
-        }
-
-        if ( controller_manager->get_keydown(SDLK_d) ) {
-            if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y,
-                                       'd') == 0 ) {
-                player->position += glm::vec3(1.0f * tile_size.x, 0.0f, 0.0f);
-                player->level_coordinate.x += 1;
-            }
-        }
-
-        if ( controller_manager->get_keydown(SDLK_w) ) {
-            if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y,
-                                       'w') == 0 ) {
-                player->position += glm::vec3(0.0f, 0.0f, -1 * tile_size.z);
-                player->level_coordinate.y -= 1;
-            }
-        }
-
-        if ( controller_manager->get_keydown(SDLK_s) ) {
-            if ( level1.query_location(player->level_coordinate.x,
-                                       player->level_coordinate.y,
-                                       's') == 0 ) {
-                player->position += glm::vec3(0.0f, 0.0f, 1 * tile_size.z);
-                player->level_coordinate.y += 1;
-            }
-
-        }
-
-        if ( controller_manager->get_keydown(SDLK_SPACE) ) {
-        	// attack
-        	item_sword.after_attack( &enemy );
-        }
-
-        // prepare scene()
+        game_state.update(&scene, ticks);
 
         float factor = ((float)sin(ticks)+1.f);
         float color_f = 0.5f;

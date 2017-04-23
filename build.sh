@@ -19,7 +19,7 @@ cp -r $SRC_DIR/images/* $BUILD_DIR/images/
 
 
 pushd $SRC_DIR
-    clang++ main.cpp graphics.cpp controller_manager.cpp level.cpp util.cpp core.cpp \
+    clang++ main.cpp graphics.cpp controller_manager.cpp level.cpp util.cpp core.cpp game.cpp \
     -F$THIRDPARTY_DIR"/frameworks" -I$THIRDPARTY_DIR"/include" \
     -framework SDL2 -framework SDL2_Image -framework opengl \
     -o $BUILD_DIR"/ludum_dare_38" -std=c++11 \

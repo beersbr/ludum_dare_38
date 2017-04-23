@@ -12,7 +12,8 @@
 
 
 #define SCENE_ENTITY_POOL_MAX 512
-
+#define TILE_SIZE glm::vec3(50.f, 20.f, 50.f)
+#define CAMERA_OFFSET glm::vec3(25.0f, 250.f, 125.f)
 
 typedef struct _entity_t {
     unsigned int id;
@@ -77,18 +78,9 @@ typedef struct _scene_t {
 
     entity_t *player;
 
-    level_t level;
+    level_t *level;
 
 } scene_t;
-
-
-typedef void (*game_state_update)(unsigned long);
-typedef void (*game_state_render)();
-
-typedef struct _game_state_t {
-    game_state_update update;
-    game_state_render render;
-} game_state_t;
 
 
 void create_scene(scene_t *scene,

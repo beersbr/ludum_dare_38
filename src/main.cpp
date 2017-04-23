@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         #endif
     }
 
-    IMG_Init(IMG_INIT_PNG);
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -61,40 +61,49 @@ int main(int argc, char *argv[])
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
 
+    texture_t default_texture = {};
+    create_texture(&default_texture, "images/tile_simple.png");
+
+    texture_t wall_texture = {};
+    create_texture(&wall_texture, "images/wall.png");
+
+    texture_t player_texture = {};
+    create_texture(&player_texture, "images/player.png");
+
     // NOTE(Brett):This is a mesh. a mesh, right now, is jst the aggregation of a bunch of vertices. we probably dont want it
     // here but that is wher eit is right now.
     vertex_definition_t mesh_data[] = {
         // front
-        { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, BLUE, glm::vec2(1.0f, 0.0f) },
-
-        // back
-        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Z, BLUE, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f,  0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, 0.5f), POS_Z, WHITE, glm::vec2(1.0f, 0.0f) },
 
         // top
-        { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, GREEN, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, 0.5f,  0.5f), POS_Y, GREEN, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, 0.5f, -0.5f), POS_Y, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, 0.5f,  0.5f), POS_Y, WHITE, glm::vec2(1.0f, 0.0f) },
+
+        // back
+        { glm::vec3( 0.5f,  0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Z, WHITE, glm::vec2(1.0f, 0.0f) },
 
         // bottom
-        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(0.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, RED, glm::vec2(1.0f, 1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(0.0f, 0.0f) },
-        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, RED, glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3( 0.5f, -0.5f,  0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(0.0f, 0.0f) },
+        { glm::vec3( 0.5f, -0.5f, -0.5f), NEG_Y, BLACK, glm::vec2(1.0f, 0.0f) },
 
         // left
         { glm::vec3(-0.5f,  0.5f, -0.5f), NEG_X, WHITE, glm::vec2(0.0f, 1.0f) },
@@ -129,9 +138,14 @@ int main(int argc, char *argv[])
 
     // NOTE(Brett): a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
     // all the information needed to draw the mesh onto the screen (like location etc)
-    model_t model = {};
-    create_model(&model, cube_mesh, &default_shader);
+    model_t floor_model = {};
+    create_model(&floor_model, cube_mesh, &default_shader, &default_texture);
 
+    model_t player_model = {};
+    create_model(&player_model, cube_mesh, &default_shader, &player_texture);
+
+    model_t wall_model = {};
+    create_model(&wall_model, cube_mesh, &default_shader, &wall_texture);
 
     // NOTE(Brett):Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
     // point
@@ -169,12 +183,12 @@ int main(int argc, char *argv[])
         // right now an entity is nothing more than a position, id and memory inside the scene.
         entity_t *tile_entity = request_scene_entity(&scene,
                                                      glm::vec3(x_offset, y_offset, z_offset),
-                                                     &model);
+                                                     &floor_model);
 
         if ( tile.wall_s ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset+25.f-(5.0/2.f)),
-                                                       &model);
+                                                       &wall_model);
 
             tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
             tile_wall->is_static = true;
@@ -184,7 +198,7 @@ int main(int argc, char *argv[])
         if ( tile.wall_w ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset-25.f+(5.0/2.f)),
-                                                       &model);
+                                                       &wall_model);
 
             tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
             tile_wall->is_static = true;
@@ -194,7 +208,7 @@ int main(int argc, char *argv[])
         if ( tile.wall_a ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset-25.f+(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &model);
+                                                       &wall_model);
 
             tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
             tile_wall->is_static = true;
@@ -204,7 +218,7 @@ int main(int argc, char *argv[])
         if ( tile.wall_d ) { 
             entity_t *tile_wall = request_scene_entity(&scene,
                                                        glm::vec3(x_offset+25.f-(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &model);
+                                                       &wall_model);
 
             tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
             tile_wall->is_static = true;
@@ -228,7 +242,7 @@ int main(int argc, char *argv[])
                                             glm::vec3(TILE_SIZE.x/2.f,
                                                       TILE_SIZE.y+player_size.y/2.f,
                                                       TILE_SIZE.z/2.f),
-                                            &model);
+                                            &player_model);
 
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);
@@ -246,6 +260,7 @@ int main(int argc, char *argv[])
 
     SDL_GL_SetSwapInterval(0);
     glEnable(GL_DEPTH_TEST);
+    glEnable( GL_BLEND );
 
     static bool running = true;
     static SDL_Event event = {};

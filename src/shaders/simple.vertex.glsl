@@ -13,6 +13,7 @@ layout(location = 2) in vec3 color;
 layout(location = 3) in vec2 uv;
 
 out vec3 fg_color;
+out vec2 fg_uv;
 
 void main(void) {
 	vec3 offset_normal = vec3(model * vec4(normal, 1.0));
@@ -20,6 +21,7 @@ void main(void) {
 	float light        = dot(normal, light_offset);
 
 	fg_color = color * light;
+	fg_uv = uv;
 	gl_Position = projection * view * model * vec4(position, 1.0);
 }
 

@@ -76,10 +76,11 @@ typedef struct _model_t {
     glm::vec3 rotation;
     glm::vec3 scale;
 
+    shader_t *shader;
+    texture_t *texture;
+
     GLuint VAO;
     GLuint VBO;
-
-    shader_t *shader;
 
     mesh_t mesh;
 
@@ -102,7 +103,7 @@ void draw_model(model_t *model);
 
 GLuint create_shader(GLenum type, char *shader_source);
 
-void create_model(model_t *model, mesh_t mesh, shader_t *shader);
+void create_model(model_t *model, mesh_t mesh, shader_t *shader, texture_t *texture);
 
 void create_texture(texture_t *texture, char const * image_path); 
 

@@ -129,16 +129,17 @@ void create_shader_program(shader_t *shader, char const * vertex_shader_path, ch
 }
 
 
-void create_model(model_t *model, mesh_t mesh, shader_t *shader)
+void create_model(model_t *model, mesh_t mesh, shader_t *shader, texture_t *texture)
 {
     static int ids = 0;
 
     assert(model);
     assert(shader);
 
-    model->id     = ++ids;
-    model->mesh   = mesh;
-    model->shader = shader;
+    model->id      = ++ids;
+    model->mesh    = mesh;
+    model->shader  = shader;
+    model->texture = texture;
 
     glGenVertexArrays(1, &model->VAO);
 
@@ -237,7 +238,7 @@ void create_texture(texture_t *texture, char const * image_path)
                  texture->width,
                  texture->height,
                  0,
-                 GL_RGBA,
+                 GL_BGRA,
                  GL_UNSIGNED_BYTE,
                  tmp_sdl_surface->pixels);
 
@@ -245,6 +246,14 @@ void create_texture(texture_t *texture, char const * image_path)
 
 }
 
+
+void use_texture(texture_t *texture, GLint unit)
+{
+    assert(texture);
+    glActiveTexture(GL_TEXTURE0+unit);
+    glBindTexture(GL_TEXTURE_2D, texture->id);
+
+}
 
 
 

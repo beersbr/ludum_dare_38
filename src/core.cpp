@@ -54,12 +54,16 @@ void draw_scene(scene_t *scene)
         GLint view_location       = get_uniform_location(model->shader, "view");
         GLint model_location      = get_uniform_location(model->shader, "model");
         GLint light_position      = get_uniform_location(model->shader, "light1_position");
+        GLint tex_position        = get_uniform_location(model->shader, "tex");
 
         glUniformMatrix4fv(projection_location, 1, false, (GLfloat*)&scene->projection_matrix[0]);
         glUniformMatrix4fv(view_location, 1, false, (GLfloat*)&view_matrix[0]);
         glUniformMatrix4fv(model_location, 1, false, (GLfloat*)&model_matrix[0]);
 
         glUniform3fv(light_position, 1, &scene->light1_position[0]);
+
+        use_texture(model->texture, 0);
+        glUniform1i(tex_position, 0);
 
         draw_model(model);
     }

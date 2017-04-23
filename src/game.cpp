@@ -364,9 +364,8 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 }
 
 STATE_FUNCTION_ID enemy_death_animation( scene_t *scene, unsigned int ticks ) { 
+    entity_t *player = scene->player; 
     entity_t *enemy;
-
-    std::cout << "Enemy action" << std::endl;
 
     std::list<entity_t *>::const_iterator enemy_iterator = scene->active_entities.begin();
     while ( enemy_iterator != scene->active_entities.end() ) {
@@ -377,6 +376,12 @@ STATE_FUNCTION_ID enemy_death_animation( scene_t *scene, unsigned int ticks ) {
         }
         else {
             if( 0 >= enemy->enemy_health ) {
+                player->level_coordinate.y = enemy->level_coordinate.y;
+                player->level_coordinate.x = enemy->level_coordinate.x;
+                player->animation_end_position = enemy->position;
+                player->animation_start_position = player->position;
+                create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
                 scene->active_entities.erase(enemy_iterator++);
                 scene->dead_entities.push_back(enemy);
             }
@@ -386,7 +391,7 @@ STATE_FUNCTION_ID enemy_death_animation( scene_t *scene, unsigned int ticks ) {
         }
     }
 
-    return PLAYER_ACTION;
+    return PLAYER_MOVE_ANIMATION;
 }
 
 STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int ticks ) {

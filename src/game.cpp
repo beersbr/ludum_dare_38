@@ -1,6 +1,15 @@
 #include "game.hpp"
 
-state_update_function player_action(scene_t *scene, unsigned int ticks)
+static state_update_function STATE_FUNCTIONS[] = {
+    player_action,
+    player_move_animation
+};
+
+state_update_function get_state(STATE_FUNCTION_ID id) {
+    return STATE_FUNCTIONS[id];
+}
+
+STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 {
     entity_t *player = scene->player;
 
@@ -23,8 +32,8 @@ state_update_function player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(-1 * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, 1000, linear);
-            return player_move_animation;
+            create_animation(&player->animation, ticks, 300, linear);
+            return PLAYER_MOVE_ANIMATION;
         }
 
     }
@@ -38,8 +47,8 @@ state_update_function player_action(scene_t *scene, unsigned int ticks)
             
             player->animation_start_position = player->position;
             player->animation_end_position   = player->position + glm::vec3(1.0f * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, 1000, linear);
-            return player_move_animation;
+            create_animation(&player->animation, ticks, 300, linear);
+            return PLAYER_MOVE_ANIMATION;
         }
 
     }
@@ -53,8 +62,8 @@ state_update_function player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1 * TILE_SIZE.z);
-            create_animation(&player->animation, ticks, 1000, linear);
-            return player_move_animation;
+            create_animation(&player->animation, ticks, 300, linear);
+            return PLAYER_MOVE_ANIMATION;
         }
 
     }
@@ -68,23 +77,24 @@ state_update_function player_action(scene_t *scene, unsigned int ticks)
 
             player->animation_start_position = player->position;
             player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1 * TILE_SIZE.z);    
-            create_animation(&player->animation, ticks, 1000, linear);
-            return player_move_animation;
+            create_animation(&player->animation, ticks, 300, linear);
+            return PLAYER_MOVE_ANIMATION;
         }   
 
     }
 
-    return player_action;
+    return PLAYER_ACTION;
 }
 
 
-state_update_function player_move_animation(scene_t *scene, unsigned int ticks)
+STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks)
 {
     entity_t *player = scene->player;
 
-    if ( player.animation.is_done ) {
-        return player_action;
+    if ( (ticks - player->animation.start_tick) >= player->animation.duration ) {
+        player->position = player->animation_end_position;
+        return PLAYER_ACTION;
     }
 
-    return player_move_animation;
+    return PLAYER_MOVE_ANIMATION;
 }

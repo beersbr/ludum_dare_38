@@ -290,14 +290,15 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        float ticks = SDL_GetTicks()/500.f;
 
         // plyaer action
         // player animation
         // turn change 
 
-        assert(game_state.update);
-        game_state.update = (state_update_function)game_state.update(&scene, ticks);
+        STATE_FUNCTION_ID id = game_state.update(&scene, SDL_GetTicks());
+        game_state.update = get_state(id);
+        
+        float ticks = SDL_GetTicks()/500.f;
 
         float factor = ((float)sin(ticks)+1.f);
         float color_f = 0.5f;

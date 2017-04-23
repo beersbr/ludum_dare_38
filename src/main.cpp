@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
                                             glm::vec3(TILE_SIZE.x/2.f,
                                                       TILE_SIZE.y+player_size.y/2.f,
                                                       TILE_SIZE.z/2.f),
-                                            &model);
+                                            &player_model);
 
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);

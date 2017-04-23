@@ -2,7 +2,11 @@
 
 static state_update_function STATE_FUNCTIONS[] = {
     player_action,
-    player_move_animation
+    player_attack_animation,
+    player_move_animation,
+    enemy_action,
+    enemy_attack_animation,
+    enemy_move_animation
 };
 
 state_update_function get_state(STATE_FUNCTION_ID id) {
@@ -87,11 +91,13 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 }
 
 
-STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks)
-{
-    entity_t *player = scene->player;
+STATE_FUNCTION_ID player_attack_animation(scene_t *scene, unsigned int ticks) {
+    return PLAYER_ATTACK_ANIMATION;
+}
 
-    
+
+STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks) {
+    entity_t *player = scene->player;
 
     if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
         player->position = player->animation_end_position;
@@ -105,4 +111,49 @@ STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks)
     }
 
     return PLAYER_MOVE_ANIMATION;
+}
+
+STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int tick ) {
+    entity_t *enemy;
+
+    for(int i=0; i<scene->entities_pool.size(); i++) {
+        if(!(scene->entities_pool[i].is_enemy)) {
+            continue;
+        }
+
+        enemy = &scene->entities_pool[i];
+    }
+
+    // TODO(JP): move towards player
+    // TODO(JP): attack if player in neighboring tile
+
+    return ENEMY_ACTION;
+}
+
+STATE_FUNCTION_ID enemy_attack_animation( scene_t *scene, unsigned int tick ) {
+    entity_t *enemy;
+
+    for(int i=0; i<scene->entities_pool.size(); i++) {
+        if(!(scene->entities_pool[i].is_enemy)) {
+            continue;
+        }
+
+        enemy = &scene->entities_pool[i];
+    }
+
+    return ENEMY_ATTACK_ANIMATION;
+}
+
+STATE_FUNCTION_ID enemy_move_animation( scene_t *scene, unsigned int tick ) {
+    entity_t *enemy;
+
+    for(int i=0; i<scene->entities_pool.size(); i++) {
+        if(!(scene->entities_pool[i].is_enemy)) {
+            continue;
+        }
+
+        enemy = &scene->entities_pool[i];
+    }
+
+    return ENEMY_MOVE_ANIMATION;
 }

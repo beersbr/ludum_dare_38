@@ -4,6 +4,7 @@
 static state_update_function STATE_FUNCTIONS[] = {
     player_action,
     player_attack_animation,
+    player_attack_complete,
     player_move_animation,
     level_change_check,
     level_transition,
@@ -19,6 +20,7 @@ state_update_function get_state(STATE_FUNCTION_ID id) {
 STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 {
     entity_t *player = scene->player;
+    entity_t *enemy;
 
     if ( controller_manager->get_mousedown(SDL_BUTTON_MIDDLE) ) {
         glm::vec2 delta        = controller_manager->cursor - controller_manager->last_cursor;
@@ -34,15 +36,35 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
         if ( scene->level->query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'a') != TILE_INVALID ) {
- 
-            player->level_coordinate.x -= 1;
 
-            player->animation_start_position = player->position;
-            player->animation_end_position = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-            return PLAYER_MOVE_ANIMATION;
+            // NOTE(JP): Check for an enemy in the next tile before moving
+            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
+                if ( !(scene->entities_pool[i].is_enemy) ) {
+                    continue;
+                }
+
+                enemy = &scene->entities_pool[i];
+
+                if ( enemy->level_coordinate.x == player->level_coordinate.x - 1 &&
+                     enemy->level_coordinate.y == player->level_coordinate.y ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(-ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+                    return PLAYER_ATTACK_ANIMATION;
+                }
+                else {
+                    player->level_coordinate.x -= 1;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(-1.f * TILE_SIZE.x, 0.0f, 0.0f);
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+                    return PLAYER_MOVE_ANIMATION;
+                }
+            }
         }
-
     }
 
     if ( controller_manager->get_keydown(SDLK_d) ) {
@@ -50,14 +72,35 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    player->level_coordinate.y,
                                    'd') != TILE_INVALID ) {
 
-            player->level_coordinate.x += 1;
-            
-            player->animation_start_position = player->position;
-            player->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
-            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-            return PLAYER_MOVE_ANIMATION;
-        }
 
+            // NOTE(JP): Check for an enemy in the next tile before moving
+            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
+                if ( !(scene->entities_pool[i].is_enemy) ) {
+                    continue;
+                }
+
+                enemy = &scene->entities_pool[i];
+
+                if ( enemy->level_coordinate.x == player->level_coordinate.x + 1 &&
+                     enemy->level_coordinate.y == player->level_coordinate.y ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+                    return PLAYER_ATTACK_ANIMATION;
+                }
+                else {
+                    player->level_coordinate.x += 1;
+                    
+                    player->animation_start_position = player->position;
+                    player->animation_end_position   = player->position + glm::vec3(1.f * TILE_SIZE.x, 0.0f, 0.0f);
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+                    return PLAYER_MOVE_ANIMATION;
+                }
+            }
+        }
     }
 
     if ( controller_manager->get_keydown(SDLK_w) ) {
@@ -65,14 +108,34 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    player->level_coordinate.y,
                                    'w') != TILE_INVALID ) {
 
-            player->level_coordinate.y -= 1;
+            // NOTE(JP): Check for an enemy in the next tile before moving
+            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
+                if ( !(scene->entities_pool[i].is_enemy) ) {
+                    continue;
+                }
 
-            player->animation_start_position = player->position;
-            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
-            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
-            return PLAYER_MOVE_ANIMATION;
+                enemy = &scene->entities_pool[i];
+
+                if ( enemy->level_coordinate.x == player->level_coordinate.x &&
+                     enemy->level_coordinate.y == player->level_coordinate.y - 1 ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+                    return PLAYER_ATTACK_ANIMATION;
+                }
+                else {
+                    player->level_coordinate.y -= 1;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -1.f * TILE_SIZE.z);
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+                    return PLAYER_MOVE_ANIMATION;
+                }
+            }
         }
-
     }
 
     if ( controller_manager->get_keydown(SDLK_s) ) {
@@ -80,14 +143,34 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
                                    player->level_coordinate.y,
                                    's') != TILE_INVALID ) {
 
-            player->level_coordinate.y += 1;
+            // NOTE(JP): Check for an enemy in the next tile before moving
+            for ( int i=0; i<scene->entities_pool.size(); i++ ) {
+                if ( !(scene->entities_pool[i].is_enemy) ) {
+                    continue;
+                }
 
-            player->animation_start_position = player->position;
-            player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);    
-            create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
-            return PLAYER_MOVE_ANIMATION;
+                enemy = &scene->entities_pool[i];
+
+                if ( enemy->level_coordinate.x == player->level_coordinate.x &&
+                     enemy->level_coordinate.y == player->level_coordinate.y + 1 ) {
+                    enemy->enemy_health--;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+                    return PLAYER_ATTACK_ANIMATION;
+                }
+                else {
+                    player->level_coordinate.y += 1;
+
+                    player->animation_start_position = player->position;
+                    player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, 1.f * TILE_SIZE.z);    
+                    create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+                    return PLAYER_MOVE_ANIMATION;
+                }
+            }
         }   
-
     }
 
     return PLAYER_ACTION;
@@ -95,9 +178,41 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
  
 STATE_FUNCTION_ID player_attack_animation( scene_t *scene, unsigned int ticks ) {
+    entity_t *player = scene->player;
+    
+    if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
+        player->animation_end_position = player->animation_start_position;
+        player->animation_start_position = player->position;
+        create_animation(&player->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out);
+
+        return PLAYER_ATTACK_COMPLETE;
+    }
+    else {
+        float value = eval_animation(&player->animation, ticks);
+
+        glm::vec3 delta = (player->animation_end_position - player->animation_start_position);
+        player->position = player->animation_start_position + (delta * value);
+    }
+
     return PLAYER_ATTACK_ANIMATION;
 }
 
+
+STATE_FUNCTION_ID player_attack_complete( scene_t *scene, unsigned int ticks ) {
+    entity_t *player = scene->player;
+
+    if ( player->animation.is_done || ticks - player->animation.start_tick > player->animation.duration ) {
+        return LEVEL_CHANGE_CHECK;
+    }
+    else {
+        float value = eval_animation(&player->animation, ticks);
+
+        glm::vec3 delta = (player->animation_end_position - player->animation_start_position);
+        player->position = player->animation_start_position + (delta * value);
+    }
+
+    return PLAYER_ATTACK_COMPLETE;
+}
 
 STATE_FUNCTION_ID player_move_animation( scene_t *scene, unsigned int ticks ) {
     entity_t *player = scene->player;
@@ -141,6 +256,8 @@ STATE_FUNCTION_ID level_change_check( scene_t *scene, unsigned int ticks ) {
 
 STATE_FUNCTION_ID level_transition( scene_t *scene, unsigned int ticks ) {
     std::cout << "Changing level..." << std::endl;
+
+    // TODO(JP): change the level
 
     return PLAYER_ACTION;
 }

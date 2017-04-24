@@ -3,6 +3,7 @@
 
 static state_update_function STATE_FUNCTIONS[] = {
     player_action,
+    player_death_animation,
     player_attack_animation,
     player_attack_complete,
     player_move_animation,
@@ -33,6 +34,10 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     }
     else { 
         scene->camera_position = scene->camera_lookat + CAMERA_OFFSET;
+    }
+
+    if ( 0 >= player->player_health ) {
+        return PLAYER_DEATH_ANIMATION;
     }
 
     if ( controller_manager->get_keydown(SDLK_a) ) {
@@ -303,6 +308,8 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                 enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
                 create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
 
+                player->player_health--;
+
                 return ENEMY_ATTACK_ANIMATION;
             }
             else if ( delta_x && delta_x < 0 && scene->level.query_location(enemy->level_coordinate.x,
@@ -311,6 +318,8 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                 enemy->animation_start_position = enemy->position;
                 enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
                 create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
+                player->player_health--;
 
                 return ENEMY_ATTACK_ANIMATION;
             }
@@ -321,6 +330,8 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                 enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
                 create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
 
+                player->player_health--;
+
                 return ENEMY_ATTACK_ANIMATION;
             }
             else if ( delta_y && delta_y > 0 && scene->level.query_location(enemy->level_coordinate.x,
@@ -329,6 +340,8 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                 enemy->animation_start_position = enemy->position;
                 enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
                 create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
+                player->player_health--;
 
                 return ENEMY_ATTACK_ANIMATION;
             }
@@ -510,4 +523,11 @@ STATE_FUNCTION_ID enemy_move_animation( scene_t *scene, unsigned int ticks ) {
     }
 
     return ENEMY_MOVE_ANIMATION;
+}
+
+STATE_FUNCTION_ID player_death_animation( scene_t *scene, unsigned int ticks ) {
+
+    std::cout << "YOU DEAD" << std::endl;
+
+    return PLAYER_ACTION;
 }

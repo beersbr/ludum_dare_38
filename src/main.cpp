@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
 
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);
+    player->player_health = 10;
 
     glm::vec2 enemy_coordinates = glm::vec2(4.f, 4.f);
     glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
@@ -211,6 +212,7 @@ int main(int argc, char *argv[])
     enemy->is_enemy         = true;
     enemy->enemy_can_move   = true;
     enemy->enemy_health 	= 2;
+
 
 
 

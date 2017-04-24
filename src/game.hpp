@@ -21,6 +21,7 @@ enum STATE_FUNCTION_ID {
     ENEMY_ACTION,
     ENEMY_DEATH_ANIMATION,
     ENEMY_ATTACK_ANIMATION,
+    ENEMY_ATTACK_COMPLETE,
     ENEMY_MOVE_ANIMATION,
     NUM_STATES
 };
@@ -40,6 +41,7 @@ STATE_FUNCTION_ID level_transition(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID enemy_action(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID enemy_death_animation(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID enemy_attack_animation(scene_t *scene, unsigned int ticks);
+STATE_FUNCTION_ID enemy_attack_complete(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID enemy_move_animation(scene_t *scene, unsigned int ticks);
 
 state_update_function get_state(STATE_FUNCTION_ID id);

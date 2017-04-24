@@ -141,6 +141,7 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
                                                       TILE_SIZE.z/2.f),
                                             &GFX_MODELS["player"]);
 
+
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);
     player->player_health = 10;
@@ -225,13 +226,20 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
 
     scene->open_entities.pop_back();
 
-    // memset((void*)entity, sizeof(entity_t), 0);
-
     entity->id       = ++ids;
     entity->position = position;
     entity->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     entity->scale    = glm::vec3(1.0f, 1.0f, 1.0f);
     entity->model    = model;
+
+    // NOTE(JP): Sometimes if we don't do this, reused entities can have multiple properties
+    entity->is_tile = false;
+    entity->is_static = false;
+    entity->is_animating = false;    
+    entity->is_enemy = false;
+    entity->enemy_can_move = false;
+    entity->is_player = false;
+    entity->is_item = false;
     
     scene->active_entities.push_back(entity);
 

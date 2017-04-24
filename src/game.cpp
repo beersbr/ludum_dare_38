@@ -55,7 +55,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x - 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
-                    enemy->enemy_health--;
+                     enemy->enemy_health--;
 
                     player->animation_start_position = player->position;
                     player->animation_end_position = player->position + glm::vec3(-ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
@@ -91,7 +91,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x + 1 &&
                      enemy->level_coordinate.y == player->level_coordinate.y ) {
-                    enemy->enemy_health--;
+                     enemy->enemy_health--;
 
                     player->animation_start_position = player->position;
                     player->animation_end_position = player->position + glm::vec3(ATTACK_MOVE_DISTANCE * TILE_SIZE.x, 0.0f, 0.0f);    
@@ -126,7 +126,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y - 1 ) {
-                    enemy->enemy_health--;
+                     enemy->enemy_health--;
 
                     player->animation_start_position = player->position;
                     player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, -ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
@@ -161,7 +161,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
 
                 if ( enemy->level_coordinate.x == player->level_coordinate.x &&
                      enemy->level_coordinate.y == player->level_coordinate.y + 1 ) {
-                    enemy->enemy_health--;
+                     enemy->enemy_health--;
 
                     player->animation_start_position = player->position;
                     player->animation_end_position = player->position + glm::vec3(0.0f, 0.0f, ATTACK_MOVE_DISTANCE * TILE_SIZE.z);    
@@ -251,13 +251,13 @@ STATE_FUNCTION_ID level_change_check( scene_t *scene, unsigned int ticks ) {
 
         return LEVEL_TRANSITION;
     }
-    else if ( scene->level.query_location(player->level_coordinate.x,
-                                   player->level_coordinate.y,
-                                   '\0') == TILE_ENTRANCE ) {
-        std::cout << "Found entrance" << std::endl;
+    // else if ( scene->level.query_location(player->level_coordinate.x,
+    //                                player->level_coordinate.y,
+    //                                '\0') == TILE_ENTRANCE ) {
+    //     std::cout << "Found entrance" << std::endl;
 
-        return LEVEL_TRANSITION;
-    }
+    //     return LEVEL_TRANSITION;
+    // }
 
     return ENEMY_ACTION;
 }

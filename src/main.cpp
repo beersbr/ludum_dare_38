@@ -51,6 +51,11 @@ int main(int argc, char *argv[])
                                    // SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
 
     SDL_GLContext main_context = SDL_GL_CreateContext(main_window);
+    
+    SDL_GL_SetSwapInterval(0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable( GL_BLEND );
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     #ifdef _WIN32
     // glew things for windows
@@ -179,15 +184,10 @@ int main(int argc, char *argv[])
 
     
     game_state_t game_state = {};
-
     int state_loop = 0;
-
     game_state.update = player_action;
 
-    SDL_GL_SetSwapInterval(0);
-    glEnable(GL_DEPTH_TEST);
-    glEnable( GL_BLEND );
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+ 
 
     static bool running = true;
     static SDL_Event event = {};

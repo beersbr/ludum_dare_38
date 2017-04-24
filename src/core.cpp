@@ -22,7 +22,7 @@ void create_scene(scene_t *scene,
         scene->open_entities.push_back(&(scene->entities_pool[i]));
     }
 
-
+    scene->level_counter = 0;
     update_scene_create_new_level(scene, level_size);
 
 }
@@ -30,31 +30,32 @@ void create_scene(scene_t *scene,
 
 void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
 {
+    assert(scene);
 
-    for ( auto entity : scene->active_entities ) {
-        memset((void*)entity, sizeof(entity_t), 0);
+    scene->level_counter += 1;
+
+    for ( entity_t* entity : scene->active_entities ) {
         scene->open_entities.push_front(entity);
     }
 
     scene->active_entities.clear();
 
-    for ( auto entity : scene->dead_entities ) {
-        memset((void*)entity, sizeof(entity_t), 0);
+    for ( entity_t* entity : scene->dead_entities ) {
         scene->open_entities.push_front(entity);
     }
 
     scene->dead_entities.clear();
 
-    level_t level;
-    level.create_level(level_size.x, level_size.y);
-    level.create_wall( 4, 3, 'w' );
-    level.create_wall( 1, 2, 'a' );
-    level.create_wall( 6, 7, 's' );
-    level.create_wall( 5, 1, 'd' );
+    // scene->level_t level;
+    scene->level.create_level(level_size.x, level_size.y);
+    scene->level.create_wall( 4, 3, 'w' );
+    scene->level.create_wall( 1, 2, 'a' );
+    scene->level.create_wall( 6, 7, 's' );
+    scene->level.create_wall( 5, 1, 'd' );
     // level.print_level();
 
-    for( int offset = 0; offset < level.grid.size(); ++offset ) {
-        tile_t tile = level.grid[offset];
+    for( int offset = 0; offset < scene->level.grid.size(); ++offset ) {
+        tile_t tile = scene->level.grid[offset];
 
         float x_offset = tile.x * TILE_SIZE.x + TILE_SIZE.x/2.f;
         float z_offset = tile.y * TILE_SIZE.z + TILE_SIZE.z/2.f;
@@ -116,7 +117,7 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
         tile_entity->scale = TILE_SIZE;
     }
 
-    scene->level = level;    
+    // scene->level = level;    
 
     glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
@@ -132,6 +133,7 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
                                                       TILE_SIZE.y+player_size.y/2.f,
                                                       TILE_SIZE.z/2.f),
                                             &GFX_MODELS["player"]);
+    
 
     entity_t *enemy = request_scene_entity(scene,
                                             glm::vec3(TILE_SIZE.x/2.f,
@@ -157,7 +159,6 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
     scene->camera_lookat   = camera_lookat;
     scene->camera_position = camera_position;
     scene->player          = player;
-
 }
 
 
@@ -170,7 +171,7 @@ void draw_scene(scene_t *scene)
                                         glm::vec3(0.0f, 1.0f, 0.0f));
 
 
-    for ( auto entity : scene->active_entities ) {
+    for ( entity_t* entity : scene->active_entities ) {
 
         model_t *model = entity->model;
         glBindVertexArray(model->VAO);
@@ -216,9 +217,15 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
 
     entity_t *entity = scene->open_entities.back();
 
+    if (entity->id > 0) {
+        std::cout << "REUSING ENTITY" << std::endl;
+    }
+
     assert(entity);
 
     scene->open_entities.pop_back();
+
+    // memset((void*)entity, sizeof(entity_t), 0);
 
     entity->id       = ++ids;
     entity->position = position;

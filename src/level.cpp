@@ -46,6 +46,7 @@ void level_t::create_level( int width, int height ) {
 	grid_width = width;
 	grid_height = height;
 
+	grid.clear();
 	grid.resize( width*height );
 
 	// Create entrance on bottom row of grid

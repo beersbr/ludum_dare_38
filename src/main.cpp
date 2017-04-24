@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
                                             scene.camera_lookat,
                                             glm::vec3(0.0f, 1.0f, 0.0f));
 
-        render_text("A small room v0.1",
+        render_text("A small tower :: floor " + std::to_string(scene.level_counter),
                     glm::vec3(-390.f, -290.0f, -1.0f),
                     WHITE,
                     0.5f,

@@ -35,7 +35,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
     }
 
     if ( controller_manager->get_keydown(SDLK_a) ) {
-        if ( scene->level->query_location(player->level_coordinate.x,
+        if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'a') != TILE_INVALID ) {
 
@@ -67,7 +67,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
         }
     }
     else if ( controller_manager->get_keydown(SDLK_d) ) {
-        if ( scene->level->query_location(player->level_coordinate.x,
+        if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'd') != TILE_INVALID ) {
 
@@ -103,7 +103,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
         }
     }
     else if ( controller_manager->get_keydown(SDLK_w) ) {
-        if ( scene->level->query_location(player->level_coordinate.x,
+        if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    'w') != TILE_INVALID ) {
 
@@ -138,7 +138,7 @@ STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks)
         }
     }
     else if ( controller_manager->get_keydown(SDLK_s) ) {
-        if ( scene->level->query_location(player->level_coordinate.x,
+        if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    's') != TILE_INVALID ) {
 
@@ -237,7 +237,7 @@ STATE_FUNCTION_ID player_move_animation( scene_t *scene, unsigned int ticks ) {
 STATE_FUNCTION_ID level_change_check( scene_t *scene, unsigned int ticks ) {
     entity_t *player = scene->player;
 
-    if ( scene->level->query_location(player->level_coordinate.x,
+    if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    '\0') == TILE_EXIT ) {
 
@@ -245,7 +245,7 @@ STATE_FUNCTION_ID level_change_check( scene_t *scene, unsigned int ticks ) {
 
         return LEVEL_TRANSITION;
     }
-    else if ( scene->level->query_location(player->level_coordinate.x,
+    else if ( scene->level.query_location(player->level_coordinate.x,
                                    player->level_coordinate.y,
                                    '\0') == TILE_ENTRANCE ) {
         std::cout << "Found entrance" << std::endl;
@@ -305,7 +305,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
             if( a_delta_x > a_delta_y ) {
 
                 if( 0 < delta_x ) {
-                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                    if ( scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    'd') == 0 ) {
                         enemy->level_coordinate.x += 1;
@@ -317,7 +317,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                     }
                 }
                 else {
-                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                    if ( scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    'a') == 0 ) {
                         enemy->level_coordinate.x -= 1;
@@ -331,7 +331,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
             }
             else {
                 if( 0 > delta_y ) {
-                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                    if ( scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    'w') == 0 ) {
                         enemy->level_coordinate.y -= 1;
@@ -343,7 +343,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
                     }
                 }
                 else {
-                    if ( scene->level->query_location(enemy->level_coordinate.x,
+                    if ( scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    's') == 0 ) {
                         enemy->level_coordinate.y += 1;

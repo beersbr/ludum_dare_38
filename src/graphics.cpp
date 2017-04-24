@@ -1,5 +1,9 @@
 #include "graphics.hpp"
 
+std::map<std::string, shader_t> GFX_SHADERS;
+std::map<std::string, model_t> GFX_MODELS;
+std::map<std::string, texture_t> GFX_TEXTURES;
+
 void use_shader(shader_t *shader)
 {
     static shader_t *current_shader = NULL;

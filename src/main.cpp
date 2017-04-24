@@ -55,32 +55,36 @@ int main(int argc, char *argv[])
     // glew things for windows
     #endif
 
-
-
     // NOTE(Brett):This is the default shader, it doesnt do anything super interesting right now... and its on the stack
     // TODO(Brett):We may need a shader maanger
     shader_t default_shader = {};
+
     create_shader_program(&default_shader,
                           "shaders/simple.vertex.glsl",
                           "shaders/simple.fragment.glsl");
+    GFX_SHADERS["default"] = default_shader;
 
     shader_t font_shader = {};
     create_shader_program(&font_shader,
                           "shaders/font.vertex.glsl",
                           "shaders/font.fragment.glsl");
+    GFX_SHADERS["font"] = font_shader;
 
     texture_t default_texture = {};
     create_texture(&default_texture, "images/tile_simple.png");
+    GFX_TEXTURES["default"] = default_texture;
 
     texture_t wall_texture = {};
     create_texture(&wall_texture, "images/wall.png");
+    GFX_TEXTURES["wall"] = wall_texture;
 
     texture_t player_texture = {};
     create_texture(&player_texture, "images/player.png");
+    GFX_TEXTURES["player"] = player_texture;
 
     texture_t wall2_texture = {};
     create_texture(&wall2_texture, "images/wall2.png");
-
+    GFX_TEXTURES["wall2"] = wall2_texture;
 
     setup_text_renderer(&font_shader, "fonts/Anonymous Pro.ttf");
 
@@ -153,13 +157,16 @@ int main(int argc, char *argv[])
     // NOTE(Brett): a model is the opengl manifsstation of a mesh. (it could have more than one mesh) and handles
     // all the information needed to draw the mesh onto the screen (like location etc)
     model_t floor_model = {};
-    create_model(&floor_model, cube_mesh, &default_shader, &default_texture);
+    create_model(&floor_model, cube_mesh, &default_shader, &GFX_TEXTURES["default"]);
+    GFX_MODELS["floor"] = floor_model;
 
     model_t player_model = {};
-    create_model(&player_model, cube_mesh, &default_shader, &player_texture);
+    create_model(&player_model, cube_mesh, &default_shader, &GFX_TEXTURES["player"]);
+    GFX_MODELS["player"] = player_model;
 
     model_t wall_model = {};
-    create_model(&wall_model, cube_mesh, &default_shader, &wall_texture);
+    create_model(&wall_model, cube_mesh, &default_shader, &GFX_TEXTURES["wall"]);
+    GFX_MODELS["wall"] = wall_model;
 
     // NOTE(Brett):Create the scene. The scene handles all the objects and stuff that we need for our game at a certain
     // point
@@ -195,8 +202,6 @@ int main(int argc, char *argv[])
     player->scale = player_size;
     player->level_coordinate = glm::vec2(0.f, 0.f);
 
-
-
     glm::vec2 enemy_coordinates = glm::vec2(4.f, 4.f);
     glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
     enemy->scale            = player_size;
@@ -205,7 +210,7 @@ int main(int argc, char *argv[])
     enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
     enemy->is_enemy         = true;
     enemy->enemy_can_move   = true;
-    enemy->enemy_health 	= 10;
+    enemy->enemy_health 	= 2;
 
 
 

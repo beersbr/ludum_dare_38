@@ -48,14 +48,14 @@ void create_scene(scene_t *scene,
 
         // NOTE(Brett):An entity is where we care abot things. It is the holder for the actual game object.
         // right now an entity is nothing more than a position, id and memory inside the scene.
-        entity_t *tile_entity = request_scene_entity(&scene,
+        entity_t *tile_entity = request_scene_entity(scene,
                                                      glm::vec3(x_offset, y_offset, z_offset),
-                                                     &floor_model);
+                                                     &GFX_MODELS["floor"]);
 
         if ( tile.wall_s ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
+            entity_t *tile_wall = request_scene_entity(scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset+25.f-(5.0/2.f)),
-                                                       &wall_model);
+                                                       &GFX_MODELS["wall"]);
 
             tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
             tile_wall->is_static = true;
@@ -63,9 +63,9 @@ void create_scene(scene_t *scene,
         }
 
         if ( tile.wall_w ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
+            entity_t *tile_wall = request_scene_entity(scene,
                                                        glm::vec3(x_offset, 55.f/2.f, z_offset-25.f+(5.0/2.f)),
-                                                       &wall_model);
+                                                       &GFX_MODELS["wall"]);
 
             tile_wall->scale = glm::vec3(50.f, 55.f, 5.f);
             tile_wall->is_static = true;
@@ -73,9 +73,9 @@ void create_scene(scene_t *scene,
         }
 
         if ( tile.wall_a ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
+            entity_t *tile_wall = request_scene_entity(scene,
                                                        glm::vec3(x_offset-25.f+(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &wall_model);
+                                                       &GFX_MODELS["wall"]);
 
             tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
             tile_wall->is_static = true;
@@ -83,9 +83,9 @@ void create_scene(scene_t *scene,
         }
 
         if ( tile.wall_d ) { 
-            entity_t *tile_wall = request_scene_entity(&scene,
+            entity_t *tile_wall = request_scene_entity(scene,
                                                        glm::vec3(x_offset+25.f-(5.0/2.f), 55.f/2.f, z_offset),
-                                                       &wall_model);
+                                                       &GFX_MODELS["wall"]);
 
             tile_wall->scale = glm::vec3(5.f, 55.f, 50.f);
             tile_wall->is_static = true;
@@ -95,7 +95,7 @@ void create_scene(scene_t *scene,
         tile_entity->scale = TILE_SIZE;
     }
 
-
+    scene->level = level;
 
 }
 

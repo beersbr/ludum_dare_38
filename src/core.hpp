@@ -97,7 +97,7 @@ typedef struct _scene_t {
 
     entity_t *player;
 
-    level_t *level;
+    level_t level;
 
 } scene_t;
 

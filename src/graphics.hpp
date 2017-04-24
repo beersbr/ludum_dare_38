@@ -33,7 +33,6 @@
 #define SHADER_ATTRIBUTE_COLOR 2
 #define SHADER_ATTRIBUTE_UV 3
 
-
 typedef struct _vertex_definition_t {
     glm::vec3 position;
     glm::vec3 normal;
@@ -116,5 +115,10 @@ void create_texture_raw(texture_t *texture,
                         GLenum ex_wrap            = GL_REPEAT );
 
 void use_texture(texture_t *texture, GLint unit);
+
+
+extern std::map<std::string, shader_t> GFX_SHADERS;
+extern std::map<std::string, model_t> GFX_MODELS;
+extern std::map<std::string, texture_t> GFX_TEXTURES;
 
 #endif

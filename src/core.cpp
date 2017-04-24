@@ -23,7 +23,28 @@ void create_scene(scene_t *scene,
     }
 
 
-    // NOTE(Brett):prepare the level
+    update_scene_create_new_level(scene, level_size);
+
+}
+
+
+void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
+{
+
+    for ( auto entity : scene->active_entities ) {
+        memset((void*)entity, sizeof(entity_t), 0);
+        scene->open_entities.push_front(entity);
+    }
+
+    scene->active_entities.clear();
+
+    for ( auto entity : scene->dead_entities ) {
+        memset((void*)entity, sizeof(entity_t), 0);
+        scene->open_entities.push_front(entity);
+    }
+
+    scene->dead_entities.clear();
+
     level_t level;
     level.create_level(level_size.x, level_size.y);
     level.create_wall( 4, 3, 'w' );
@@ -95,7 +116,47 @@ void create_scene(scene_t *scene,
         tile_entity->scale = TILE_SIZE;
     }
 
-    scene->level = level;
+    scene->level = level;    
+
+    glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
+
+    glm::vec3 camera_lookat = glm::vec3((8.0*TILE_SIZE.x)/2.f,
+                                        0.0f,
+                                        (8.0*TILE_SIZE.z)/2.f);
+
+
+    glm::vec3 camera_position = camera_lookat + CAMERA_OFFSET;
+
+    entity_t *player = request_scene_entity(scene,
+                                            glm::vec3(TILE_SIZE.x/2.f,
+                                                      TILE_SIZE.y+player_size.y/2.f,
+                                                      TILE_SIZE.z/2.f),
+                                            &GFX_MODELS["player"]);
+
+    entity_t *enemy = request_scene_entity(scene,
+                                            glm::vec3(TILE_SIZE.x/2.f,
+                                                      TILE_SIZE.y+player_size.y/2.f,
+                                                      TILE_SIZE.z/2.f),
+                                            &GFX_MODELS["player"]);
+
+    player->scale = player_size;
+    player->level_coordinate = glm::vec2(0.f, 0.f);
+    player->player_health = 10;
+
+    glm::vec2 enemy_coordinates = glm::vec2(5.f, 4.f);
+    glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
+    enemy->scale             = player_size;
+
+    enemy->level_coordinate = enemy_coordinates;
+    enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
+    enemy->is_enemy         = true;
+    enemy->enemy_can_move   = true;
+    enemy->enemy_health     = 2;
+
+
+    scene->camera_lookat   = camera_lookat;
+    scene->camera_position = camera_position;
+    scene->player          = player;
 
 }
 

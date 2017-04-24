@@ -260,7 +260,7 @@ STATE_FUNCTION_ID level_change_check( scene_t *scene, unsigned int ticks ) {
 STATE_FUNCTION_ID level_transition( scene_t *scene, unsigned int ticks ) {
     std::cout << "Changing level..." << std::endl;
 
-    // TODO(JP): change the level
+    update_scene_create_new_level(scene, glm::vec2(8, 8));
 
     return PLAYER_ACTION;
 }

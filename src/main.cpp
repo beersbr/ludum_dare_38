@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
                                    SDL_WINDOWPOS_CENTERED,
                                    WIDTH, HEIGHT, 
                                    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+                                   // SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
 
     SDL_GLContext main_context = SDL_GL_CreateContext(main_window);
 
@@ -55,8 +56,8 @@ int main(int argc, char *argv[])
     // glew things for windows
     #endif
 
-    // NOTE(Brett):This is the default shader, it doesnt do anything super interesting right now... and its on the stack
-    // TODO(Brett):We may need a shader maanger
+    // NOTE(Brett):This is the default shader, it doesnt do anything super interesting right 
+    // now... and its on the stack
     shader_t default_shader = {};
 
     create_shader_program(&default_shader,
@@ -177,50 +178,6 @@ int main(int argc, char *argv[])
                  glm::vec2(8.f, 8.f));
 
     
-
-    glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
-
-    glm::vec3 camera_lookat = glm::vec3((8.0*TILE_SIZE.x)/2.f,
-                                        0.0f,
-                                        (8.0*TILE_SIZE.z)/2.f);
-
-
-    glm::vec3 camera_position = camera_lookat + CAMERA_OFFSET;
-
-    entity_t *player = request_scene_entity(&scene,
-                                            glm::vec3(TILE_SIZE.x/2.f,
-                                                      TILE_SIZE.y+player_size.y/2.f,
-                                                      TILE_SIZE.z/2.f),
-                                            &player_model);
-
-   	entity_t *enemy = request_scene_entity(&scene,
-                                            glm::vec3(TILE_SIZE.x/2.f,
-                                                      TILE_SIZE.y+player_size.y/2.f,
-                                                      TILE_SIZE.z/2.f),
-                                            &player_model);
-
-    player->scale = player_size;
-    player->level_coordinate = glm::vec2(0.f, 0.f);
-    player->player_health = 10;
-
-    glm::vec2 enemy_coordinates = glm::vec2(4.f, 4.f);
-    glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
-    enemy->scale            = player_size;
-
-    enemy->level_coordinate = enemy_coordinates;
-    enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
-    enemy->is_enemy         = true;
-    enemy->enemy_can_move   = true;
-    enemy->enemy_health 	= 2;
-
-
-
-
-    scene.camera_lookat   = camera_lookat;
-    scene.camera_position = camera_position;
-    // scene.level           = &level1;
-    scene.player          = player;
-
     game_state_t game_state = {};
 
     int state_loop = 0;

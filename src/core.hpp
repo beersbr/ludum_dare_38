@@ -119,6 +119,8 @@ void create_scene(scene_t *scene,
                   glm::vec3 camera_lookat,
                   glm::vec2 level_size);
 
+void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size);
+
 void draw_scene(scene_t *scene);
 
 entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *model);

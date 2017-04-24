@@ -13,6 +13,7 @@
 
 enum STATE_FUNCTION_ID {
     PLAYER_ACTION,
+    PLAYER_DEATH_ANIMATION,
     PLAYER_ATTACK_ANIMATION,
     PLAYER_ATTACK_COMPLETE,
     PLAYER_MOVE_ANIMATION,
@@ -33,6 +34,7 @@ typedef struct _game_state_t {
 } game_state_t;
 
 STATE_FUNCTION_ID player_action(scene_t *scene, unsigned int ticks);
+STATE_FUNCTION_ID player_death_animation(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID player_attack_animation(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID player_attack_complete(scene_t *scene, unsigned int ticks);
 STATE_FUNCTION_ID player_move_animation(scene_t *scene, unsigned int ticks);

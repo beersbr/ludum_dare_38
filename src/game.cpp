@@ -301,7 +301,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
         std::cout << "Delta x: " << delta_x << " Delta y: " << delta_y << std::endl;
 
         if ( a_delta_x <=1 && a_delta_y <= 1 && a_delta_x != a_delta_y ) {
-            if ( delta_x && delta_x > 0 && scene->level.query_location(enemy->level_coordinate.x,
+            if ( delta_x && delta_x < 0 && scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    'a') == 0 ) {
                 enemy->animation_start_position = enemy->position;
@@ -312,7 +312,7 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
 
                 return ENEMY_ATTACK_ANIMATION;
             }
-            else if ( delta_x && delta_x < 0 && scene->level.query_location(enemy->level_coordinate.x,
+            else if ( delta_x && delta_x > 0 && scene->level.query_location(enemy->level_coordinate.x,
                                    enemy->level_coordinate.y,
                                    'd') == 0 ) {
                 enemy->animation_start_position = enemy->position;

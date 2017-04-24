@@ -226,20 +226,13 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
 
     scene->open_entities.pop_back();
 
+    memset((void*)entity, 0, sizeof(entity_t));
+
     entity->id       = ++ids;
     entity->position = position;
     entity->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     entity->scale    = glm::vec3(1.0f, 1.0f, 1.0f);
     entity->model    = model;
-
-    // NOTE(JP): Sometimes if we don't do this, reused entities can have multiple properties
-    entity->is_tile = false;
-    entity->is_static = false;
-    entity->is_animating = false;    
-    entity->is_enemy = false;
-    entity->enemy_can_move = false;
-    entity->is_player = false;
-    entity->is_item = false;
     
     scene->active_entities.push_back(entity);
 

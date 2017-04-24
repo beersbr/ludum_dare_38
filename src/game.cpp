@@ -297,11 +297,44 @@ STATE_FUNCTION_ID enemy_action( scene_t *scene, unsigned int ticks ) {
         std::cout << "Delta x: " << delta_x << " Delta y: " << delta_y << std::endl;
 
         if ( a_delta_x <=1 && a_delta_y <= 1 && a_delta_x != a_delta_y ) {
-            enemy->animation_start_position = enemy->position;
-            enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
-            create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+            if ( delta_x && delta_x > 0 && scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'a') == 0 ) {
+                enemy->animation_start_position = enemy->position;
+                enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
+                create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
 
-            return ENEMY_ATTACK_ANIMATION;
+                return ENEMY_ATTACK_ANIMATION;
+            }
+            else if ( delta_x && delta_x < 0 && scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'd') == 0 ) {
+                enemy->animation_start_position = enemy->position;
+                enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
+                create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
+                return ENEMY_ATTACK_ANIMATION;
+            }
+            else if ( delta_y && delta_y < 0 && scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   'w') == 0 ) {
+                enemy->animation_start_position = enemy->position;
+                enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
+                create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
+                return ENEMY_ATTACK_ANIMATION;
+            }
+            else if ( delta_y && delta_y > 0 && scene->level->query_location(enemy->level_coordinate.x,
+                                   enemy->level_coordinate.y,
+                                   's') == 0 ) {
+                enemy->animation_start_position = enemy->position;
+                enemy->animation_end_position   = enemy->position + glm::vec3( (ATTACK_MOVE_DISTANCE*delta_x) * TILE_SIZE.x, 0.0f, (ATTACK_MOVE_DISTANCE*delta_y) * TILE_SIZE.z);
+                create_animation(&enemy->animation, ticks, DEFAULT_ANIMATION_TICKS, ease_out_circ);
+
+                return ENEMY_ATTACK_ANIMATION;
+            }
+
+            return PLAYER_ACTION;
         }
 
         if ( enemy->enemy_can_move ) {

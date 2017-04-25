@@ -11,7 +11,7 @@
 #include <glm/ext.hpp>
 
 
-#define SCENE_ENTITY_POOL_MAX 150
+#define SCENE_ENTITY_POOL_MAX 512
 #define TILE_SIZE glm::vec3(50.f, 20.f, 50.f)
 #define CAMERA_OFFSET glm::vec3(25.0f, 250.f, 125.f)
 

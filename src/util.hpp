@@ -14,6 +14,8 @@
 
 #define ARRAY_SIZE(ar) (sizeof((ar))/sizeof((ar)[0]))
 
+#define RANDOM(min, max) ((min) + (rand() % (max - min + 1)))
+
 // typedef unsigned int ld38_uint;
 // typedef unsigned long ld38_ulong;
 

@@ -50,9 +50,15 @@ int main(int argc, char *argv[])
                                    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
                                    // SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN );
 
+
     SDL_GLContext main_context = SDL_GL_CreateContext(main_window);
     
     SDL_GL_SetSwapInterval(0);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable( GL_BLEND );
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
 
     #ifdef _WIN32
     // glew things for windows
@@ -184,15 +190,11 @@ int main(int argc, char *argv[])
     int state_loop = 0;
     game_state.update = player_action;
 
- 
-    glEnable(GL_DEPTH_TEST);
-    glEnable( GL_BLEND );
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     static bool running = true;
     static SDL_Event event = {};
 
     while ( running ) { 
+
         controller_manager->last_cursor = controller_manager->cursor;
 
         while ( SDL_PollEvent(&event) ) {
@@ -240,6 +242,13 @@ int main(int argc, char *argv[])
         
         scene.light1_position = scene.camera_lookat + inverse_camera_direction;
 
+
+        draw_scene(&scene);
+
+        glm::mat4 view_matrix = glm::lookAt(scene.camera_position,
+                                            scene.camera_lookat,
+                                            glm::vec3(0.0f, 1.0f, 0.0f));
+        
         render_text("A small tower :: floor " + std::to_string(scene.level_counter),
                     glm::vec3(-390.f, -290.0f, -1.0f),
                     WHITE,
@@ -257,12 +266,6 @@ int main(int argc, char *argv[])
                     WHITE,
                     0.5f,
                     projection_matrix);
-
-        draw_scene(&scene);
-
-        glm::mat4 view_matrix = glm::lookAt(scene.camera_position,
-                                            scene.camera_lookat,
-                                            glm::vec3(0.0f, 1.0f, 0.0f));
         
         SDL_GL_SwapWindow(main_window);
     }

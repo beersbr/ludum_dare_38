@@ -54,8 +54,6 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
 
     scene->active_entities.clear();
 
-    scene->active_entities.push_back(scene->player);
-
     for ( entity_t* entity : scene->dead_entities ) {
         scene->open_entities.push_front(entity);
     }
@@ -139,9 +137,9 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
     glm::vec3 enemy_size = glm::vec3(30.0f, 50.0f, 30.f);
     glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
-    glm::vec3 camera_lookat = glm::vec3((8.0*TILE_SIZE.x)/2.f,
+    glm::vec3 camera_lookat = glm::vec3((level_size.x*TILE_SIZE.x)/2.f,
                                         0.0f,
-                                        (8.0*TILE_SIZE.z)/2.f);
+                                        (level_size.y*TILE_SIZE.z)/2.f);
 
 
     glm::vec3 camera_position = camera_lookat + CAMERA_OFFSET;
@@ -171,6 +169,8 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
     enemy->is_enemy         = true;
     enemy->enemy_can_move   = true;
     enemy->enemy_health     = 2;
+
+    scene->active_entities.push_back(scene->player);
 }
 
 

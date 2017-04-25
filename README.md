@@ -1,7 +1,16 @@
 # ludum_dare_38
 Ludum Dare 38 A small world
 
+## 
 
+Move with WASD
+
+look around with middle mouse button and dragging
+
+dont get bumped... get to the top of the tower
+
+
+## STUFF
 We have a way to draw tiles now.
 
 We should probably create entities for each tile in the level object. The level object then just becomes a data holder. We probably want an entity to have an attachement to a tile. I would probably just keep it simple and add a flag to the entity struct that says "is_tile" and just add all the tile stuff to the entity. Then we can just do simple asks and keep our data SUPER flat.

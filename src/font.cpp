@@ -118,7 +118,7 @@ void render_text(std::string text,
         glyph_t g = glyphs[*c];
 
         float xpos = x + g.baseline_offset.x * scale;
-        float ypos = y + (g.size.y - g.baseline_offset.y) * scale;
+        float ypos = y - (g.size.y - g.baseline_offset.y) * scale;
 
         float w = g.size.x * scale;
         float h = g.size.y * scale;

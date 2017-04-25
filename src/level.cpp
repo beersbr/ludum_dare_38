@@ -50,10 +50,14 @@ void level_t::create_level( int width, int height ) {
 	grid.resize( width*height );
 
 	// Create entrance on bottom row of grid
-	grid[rand() % width].type = TILE_ENTRANCE;
+	int start_tile_index = rand() % width;
+	grid[start_tile_index].type = TILE_ENTRANCE;
+	start_tile = glm::vec2(start_tile_index%grid_width, start_tile_index/grid_width);
 
 	// Create exit at top row of grid
-	grid[rand() % width + (width*height-width)].type = TILE_EXIT;
+	int end_tile_index = rand() % width + (width*height-width);
+	grid[end_tile_index].type = TILE_EXIT;
+	end_tile = glm::vec2(end_tile_index%grid_width, end_tile_index/grid_width);
 
 
 	for( int i=0; i<grid_width*grid_height; i++) {

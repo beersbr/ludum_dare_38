@@ -23,6 +23,17 @@ void create_scene(scene_t *scene,
     }
 
     scene->level_counter = 0;
+
+    glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
+    entity_t *player = request_scene_entity(scene,
+                                            glm::vec3(TILE_SIZE.x/2.f,
+                                                  TILE_SIZE.y+player_size.y/2.f,
+                                                  TILE_SIZE.z/2.f),
+                                            &GFX_MODELS["player"]);
+    player->player_health = 3;
+    player->player_stat_damage = 1;
+    scene->player = player;
+
     update_scene_create_new_level(scene, level_size);
 
 }
@@ -35,10 +46,15 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
     scene->level_counter += 1;
 
     for ( entity_t* entity : scene->active_entities ) {
+        if ( entity == scene->player )
+            continue;
+
         scene->open_entities.push_front(entity);
     }
 
     scene->active_entities.clear();
+
+    scene->active_entities.push_back(scene->player);
 
     for ( entity_t* entity : scene->dead_entities ) {
         scene->open_entities.push_front(entity);
@@ -119,6 +135,8 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
 
     // scene->level = level;    
 
+    
+    glm::vec3 enemy_size = glm::vec3(30.0f, 50.0f, 30.f);
     glm::vec3 player_size = glm::vec3(30.0f, 50.0f, 30.f);
 
     glm::vec3 camera_lookat = glm::vec3((8.0*TILE_SIZE.x)/2.f,
@@ -127,39 +145,32 @@ void update_scene_create_new_level(scene_t *scene, glm::vec2 level_size)
 
 
     glm::vec3 camera_position = camera_lookat + CAMERA_OFFSET;
-
-    entity_t *player = request_scene_entity(scene,
-                                            glm::vec3(TILE_SIZE.x/2.f,
-                                                      TILE_SIZE.y+player_size.y/2.f,
-                                                      TILE_SIZE.z/2.f),
-                                            &GFX_MODELS["player"]);
+    scene->camera_lookat      = camera_lookat;
+    scene->camera_position    = camera_position;
     
-
     entity_t *enemy = request_scene_entity(scene,
-                                            glm::vec3(TILE_SIZE.x/2.f,
-                                                      TILE_SIZE.y+player_size.y/2.f,
-                                                      TILE_SIZE.z/2.f),
-                                            &GFX_MODELS["player"]);
+                                           glm::vec3(TILE_SIZE.x/2.f,
+                                                     TILE_SIZE.y+enemy_size.y/2.f,
+                                                     TILE_SIZE.z/2.f),
+                                           &GFX_MODELS["player"]);
 
+    scene->player->scale = player_size;
+    scene->player->level_coordinate = scene->level.start_tile;
+    scene->player->position = glm::vec3(TILE_SIZE.x*scene->level.start_tile.x + TILE_SIZE.x/2.f,
+                                        scene->player->position.y,
+                                        TILE_SIZE.y*scene->level.start_tile.y + TILE_SIZE.z/2.f);
 
-    player->scale = player_size;
-    player->level_coordinate = glm::vec2(0.f, 0.f);
-    player->player_health = 10;
+    scene->player->player_health += 1;
 
     glm::vec2 enemy_coordinates = glm::vec2(5.f, 4.f);
     glm::vec2 enemy_position = enemy_coordinates * glm::vec2(TILE_SIZE.x, TILE_SIZE.z);
-    enemy->scale             = player_size;
+    enemy->scale             = enemy_size;
 
     enemy->level_coordinate = enemy_coordinates;
     enemy->position += glm::vec3(enemy_position.x, 0.f, enemy_position.y);
     enemy->is_enemy         = true;
     enemy->enemy_can_move   = true;
     enemy->enemy_health     = 2;
-
-
-    scene->camera_lookat   = camera_lookat;
-    scene->camera_position = camera_position;
-    scene->player          = player;
 }
 
 
@@ -217,10 +228,6 @@ entity_t * request_scene_entity(scene_t *scene, glm::vec3 position, model_t *mod
     assert(scene);
 
     entity_t *entity = scene->open_entities.back();
-
-    if (entity->id > 0) {
-        std::cout << "REUSING ENTITY" << std::endl;
-    }
 
     assert(entity);
 

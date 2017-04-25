@@ -2,6 +2,7 @@
 #define _LEVEL_HPP
 
 #include <vector>
+#include <glm/glm.hpp>
 
 #include "tile.hpp"
 
@@ -15,6 +16,10 @@ typedef struct _level_t {
 	void create_level( int width, int height );
 	void create_wall( int x, int y, char wall );
 	int query_location( int location_x, int location_y, char move );
+
+	glm::vec2 start_tile;
+	glm::vec2 end_tile;
+
 	// Debug crap
 	void print_level();
 } level_t;
